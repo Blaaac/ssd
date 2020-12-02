@@ -94,7 +94,7 @@ function updateId() {
 function getIndexById() {
   var id = $("#txtId").val();
   $.ajax({
-    url: "http://localhost:5000/api/indici" + id,
+    url: "http://localhost:5000/api/fin/" + id,
     type: "GET",
     contentType: "application/json",
     data: "",

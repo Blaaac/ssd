@@ -44,8 +44,8 @@ public class PythonRunner
          var pi = new ProcessStartInfo
          {
             // Separated FileName and Arguments
-            FileName = "bash",// "cmd.exe",
-            //Arguments = $"/c c:/ProgramData/Anaconda3/condabin/conda.bat activate {Environment}&&python {strCommand}",
+            FileName = "/bin/bash",// "cmd.exe",
+            Arguments = $"conda activate {Environment} &&python {strCommand}",
             UseShellExecute = false, 
             CreateNoWindow = false,
             ErrorDialog = false,
@@ -72,11 +72,17 @@ public class PythonRunner
             {
                // when Exited is called, OutputDataReceived could still being loaded
                // you need a proper release code here
+               // Console.Write(sender);
+               // Console.WriteLine(e);
                Console.WriteLine("exiting ...");
                res = _outputBuilder.ToString();
             };
-         
+            try{
+
             process.Start();
+            } catch (Exception e){
+               Console.WriteLine(e);
+            }
             // You need to call this explicitly after Start
             process.BeginOutputReadLine();
 
