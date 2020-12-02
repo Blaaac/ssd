@@ -1,0 +1,1 @@
+mettere la selezione del tipo di db in file di config
