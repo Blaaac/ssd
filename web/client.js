@@ -92,7 +92,8 @@ function updateId() {
 }
 ///////////INDICI
 function getIndexById() {
-  var id = $("#txtId").val();
+  var id = $("#txtarea").val();
+  console.log(id);
   $.ajax({
     url: "http://localhost:5000/api/fin/" + id,
     type: "GET",
@@ -116,8 +117,8 @@ function showResult(res) {
 }
 function renderImage(b64imgstr) {
   var b64 = b64imgstr;
-  b64 = b64.substring(0, ba64.length - 1);
-  b64 = b64.substring(2, ba64.length);
+  b64 = b64.substring(0, b64.length - 1);
+  b64 = b64.substring(2, b64.length);
   var image = new Image();
   image.src = "data:image/png;base64," + b64;
   document.body.appendChild(image);
