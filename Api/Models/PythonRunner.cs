@@ -41,7 +41,7 @@ public class PythonRunner {
       Console.WriteLine (strCommand);
       var pi = new ProcessStartInfo {
          // Separated FileName and Arguments
-         FileName = "wrapper.sh", // "cmd.exe",
+         FileName = "wrapper.sh",
          Arguments = $"{Environment} {strCommand}",
          UseShellExecute = false,
          CreateNoWindow = false,
