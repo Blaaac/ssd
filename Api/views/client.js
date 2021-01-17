@@ -1,7 +1,7 @@
 function init() {}
 function findAll() {
   $.ajax({
-    url: "http://localhost:5000/api/Stagione",
+    url: "http://localhost:5000/api/Fin",
     type: "GET",
     contentType: "application/json",
     success: function (result) {
@@ -92,7 +92,7 @@ function updateId() {
 }
 ///////////INDICI
 function getIndexById() {
-  var id = $("#txtarea").val();
+  var id = $("#txtId").val();
   console.log(id);
   $.ajax({
     url: "http://localhost:5000/api/fin/" + id,

@@ -13,10 +13,10 @@ from sklearn.metrics import mean_squared_error
 def loadDf (path,datesf):
   # data upload
   
-  df = pd.read_csv(path, header=0)
+  df = pd.read_csv("../"+path, header=0)
   # add date column
-  df['period']= datesf
-  df = df.set_index('period')
+  # df['period']= datesf
+  # df = df.set_index('period')
   return df
 
 def preProcess(df, split):
@@ -46,19 +46,19 @@ def forecast (indexes):
   years = 2
   workdays_m = 5*4
   split = years*12*workdays_m
-  datesf = pd.read_csv('Data.csv',header=0)
-  datesf = pd.to_datetime(datesf['Data'])
+  # datesf = pd.read_csv('Data.csv',header=0)
+  # datesf = pd.to_datetime(datesf['Data'])
   
   for index in indexes:
-    df = loadDf(index,datesf)
+    df = loadDf(index,0)
     # df = np.log(df)
     # train = df[:-split]
     # test = df[-split:]
     # print(df[df.columns[0]])
     # auto arima
-    # Sarima(train,test,split)
+    Sarima(df,split)
     #LSTM
-    lstm_predict(df,split)
+    # lstm_predict(df,split)
 
 def compute_windows(dataset, look_back=1):
 	dataX, dataY = [], []
@@ -134,7 +134,10 @@ def lstm_predict(dataframe, split,log_t=False,plot=False):
   return testScore, testPredict
     
 
-def Sarima(train,test,split):
+def Sarima(df,split):
+  df = np.log(df)
+  train = df[:-split]
+  test = df[-split:]
   model = pm.auto_arima(train.values, start_p=1, start_q=1,
                             test='adf', max_p=3, max_q=3, seasonal=False,
                             d=None, D=None, trace=True,
