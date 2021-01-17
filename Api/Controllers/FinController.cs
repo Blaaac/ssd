@@ -31,33 +31,19 @@ namespace Api {
             return true;
         }
 
-        // // GET: api/Fin/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<Fin>> GetFin(int id)
-        // {
-        //     var fin = await _context.indici.FindAsync(id);
-
-        //     if (fin == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     return fin;
-        // }
-
         // GET: api/Fin/5
         [HttpGet ("{id}", Name = "GetFin")]
         public string GetFin (int id) {
             string res = "{";
-            if (id > 8) id = 8;
+            if (id > 7) id = 7;
 
             string attribute = indices[id];
+            var index = P.readIndex (attribute);
 
             Forecast F = new Forecast ();
             res += F.forecastSARIMAindex (attribute);
             res += "}";
 
-            var index = P.readIndex (attribute);
             return res;
         }
 

@@ -1,4 +1,4 @@
-import pandas as pd, numpy as np, os
+import pandas as pd, numpy as np, os, sys
 import matplotlib.pyplot as plt
 import pmdarima as pm
 from statsmodels.tsa.stattools import acf
@@ -38,16 +38,23 @@ def preProcess(df, split):
 
 
 
-def forecast (indexes): 
+def forecast (indexes,method, months=24,plot=False): 
   abspath = os.path.abspath(__file__)
   dname = os.path.dirname(abspath)
   os.chdir(dname)
 
-  years = 2
-  workdays_m = 5*4
-  split = years*12*workdays_m
+  
+  workdays_m = 21
+  split = months* workdays_m
   # datesf = pd.read_csv('Data.csv',header=0)
   # datesf = pd.to_datetime(datesf['Data'])
+  a = lambda: None
+  if (method == "arima"):
+  # auto arima
+    a = Sarima
+  elif (method == "lstm"): 
+  # LSTM
+    a =lstm_predict
   
   for index in indexes:
     df = loadDf(index,0)
@@ -55,10 +62,7 @@ def forecast (indexes):
     # train = df[:-split]
     # test = df[-split:]
     # print(df[df.columns[0]])
-    # auto arima
-    Sarima(df,split)
-    #LSTM
-    # lstm_predict(df,split)
+    a(df,split,plot=plot)
 
 def compute_windows(dataset, look_back=1):
 	dataX, dataY = [], []
@@ -127,14 +131,20 @@ def lstm_predict(dataframe, split,log_t=False,plot=False):
     testPredictPlot[:, :] = np.nan
     testPredictPlot[len(trainPredict)+(look_back*2)+1:len(dataset)-1, :] = testPredict
     # plot baseline and predictions
-    plt.plot(dataset)
-    plt.plot(trainPredictPlot)
-    plt.plot(testPredictPlot)
-    plt.show()
+    plot_prediction(dataset,trainPredictPlot,testPredictPlot)
+
   return testScore, testPredict
     
+def plot_prediction(dataset,train_p,test_p):
+  plt.plot(dataset,label= "df")
+  plt.plot(train_p,label='train')
+  plt.plot(test_p,label='test')
+  plt.legend()
+  plt.show()
 
-def Sarima(df,split):
+
+
+def Sarima(df,split,plot=False):
   df = np.log(df)
   train = df[:-split]
   test = df[-split:]
@@ -153,30 +163,29 @@ def Sarima(df,split):
   fitted = model.fit(train)
   ypred = fitted.predict_in_sample() # prediction (in-sample)
   yfore = fitted.predict(n_periods=split) # forecast (out-of-sample)
-  # plt.plot(train.values)
-  # plt.plot([None for x in range(split)]+[x for x in ypred[split:]])
-  # plt.plot([None for x in ypred]+[x for x in yfore])
-  # plt.xlabel('time');plt.ylabel('log sales')
-  # plt.show()
+
   # recostruction
   expdata = pd.DataFrame(np.exp(ypred),index=train.index)
   # unlog
   expfore = pd.DataFrame(np.exp(yfore),index=test.index)
-  
   exptrain = np.exp(train)
+  exptest = np.exp(test)
+  if (plot):
+    plot_prediction(np.exp(df),expdata,expfore)
 
-  plt.plot(expfore,label= "forecast")
+  # plt.plot(expfore,label= "forecast")
   
-  plt.plot(exptrain,label='train')
-  plt.plot(np.exp(test),label='test')
-  plt.legend()
-  plt.show()
+  # plt.plot(dataset,label='train')
+  # plt.plot(np.exp(test),label='test')
+  # plt.legend()
+  # plt.show()
+  
   # plt.plot([None for x in range(split)]+[x for x in expdata[split:]])
   # # plt.show()
   # plt.plot(df)
   # plt.plot([None for x in expdata]+[x for x in expfore])
 
-  # # ------------------ the same, but using statsmodels’ SARIMAX, morder from before
+  # ------------------ the same, but using statsmodels’ SARIMAX, morder from before
   # from statsmodels.tsa.statespace.sarimax import SARIMAX
   # sarima_model = SARIMAX(train.values, order=morder)
   # sfit = sarima_model.fit()
@@ -190,9 +199,22 @@ def Sarima(df,split):
   # plt.plot(expdata)
   # # plt.plot(df)
   # plt.plot([None for x in expdata]+[x for x in expfore])
-  # plt.show()    
- 
-indexes = ['GOLD_SPOT.csv']
-forecast(indexes)
+  # plt.show()  
+
+if __name__ == "__main__":
+  # change working directory to script path
+  abspath = os.path.abspath(__file__)
+  dname = os.path.dirname(abspath)
+  os.chdir(dname)
+
+  method = sys.argv[1]
+  
+  indexes = ['GOLD_SPOT.csv']
+  forecast(indexes, method, plot=True)
+
+  print('MAPE Number of arguments:', len(sys.argv))
+  print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
+     
+
 
 
