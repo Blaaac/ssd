@@ -28,22 +28,19 @@ def preProcess(df, split):
 
 
 def forecast (indexes,method, months=24,plot=False): 
-  abspath = os.path.abspath(__file__)
-  dname = os.path.dirname(abspath)
-  os.chdir(dname)
 
   
   workdays_m = 21
   split = months* workdays_m
   # datesf = pd.read_csv('Data.csv',header=0)
   # datesf = pd.to_datetime(datesf['Data'])
-  a = lambda: None
-  if (method == "arima"):
+  predictor = lambda: None
+  if (method == "sarima"):
   # auto arima
-    a = sarima
+    predictor = sarima
   elif (method == "lstm"): 
   # LSTM
-    a =lstm_predict
+    predictor =lstm_predict
   
   for index in indexes:
     df = load_df(index,0)
@@ -51,7 +48,7 @@ def forecast (indexes,method, months=24,plot=False):
     # train = df[:-split]
     # test = df[-split:]
     # print(df[df.columns[0]])
-    a(df,split,plot=plot)
+    predictor(df,split,plot=plot)
 
 
 
@@ -65,9 +62,11 @@ if __name__ == "__main__":
   os.chdir(dname)
 
   method = sys.argv[1]
+  investment = sys.argv[2]
+  months = sys.argv[3]
   
   indexes = ['GOLD_SPOT.csv']
-  forecast(indexes, method, plot=True)
+  forecast(indexes, method, plot=False)
 
   print('MAPE Number of arguments:', len(sys.argv))
   print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   

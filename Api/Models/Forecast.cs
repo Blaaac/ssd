@@ -7,7 +7,7 @@ namespace Api {
     public Forecast () {
 
     }
-    public string forecastIndexes (string method, string[] indexes) {
+    public string forecastIndexes (string method, string[] indexes, int investment, int months, int other) {
       string res = "\"text\":\"";
       string interpreter = "/home/ruben/anaconda3/bin/python";
       string environment = "opanalytics";
@@ -16,11 +16,12 @@ namespace Api {
       // Bitmap bmp = null;
       string attribute = indexes[0];
       try {
-        string command = $"Models/forecast.py {attribute}.csv";
+        string command = $"Models/forecast.py \"{method} {investment} {months}\"";
         string list = PR.runDosCommands (command);
         if (string.IsNullOrWhiteSpace (list)) {
           Console.WriteLine ("error in script call");
           goto lend;
+          // return res;
         }
         string[] lines = list.Split (new [] { Environment.NewLine }, StringSplitOptions.None);
         string strBitMap = "";
@@ -39,22 +40,18 @@ namespace Api {
             Console.WriteLine (fcast);
           }
         }
-        Console.Write (strBitMap);
-        strBitMap = strBitMap.Substring (strBitMap.IndexOf ("b'"));
-        res += "\",\"img\":\"" + strBitMap + "\"";
-        // try{
-        //   bmp = PR.FromPythonBase64String(strBitMap);
-        // }
-        // catch(Exception e){
-        //   throw new Exception( "error occured while trying to create image: ", e);
+        // Console.Write (strBitMap);
+        // strBitMap = strBitMap.Substring (strBitMap.IndexOf ("b'"));
+        res += "\"";
+        // res += ",\"img\":\"" + strBitMap + "\"";
 
-        // }
         goto lend;
 
       } catch (Exception e) {
         Console.WriteLine (e.ToString ());
         goto lend;
       }
+
       lend:
 
         return res;
