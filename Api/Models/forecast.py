@@ -40,8 +40,7 @@ def forecast (indexes,method, months=24,plot=False):
     predictor = sarima
   elif (method == "lstm"): 
   # LSTM
-    predictor =lstm_predict
-  
+    predictor = lstm_predict
   for index in indexes:
     df = load_df(index,0)
     # df = np.log(df)
@@ -61,12 +60,14 @@ if __name__ == "__main__":
   dname = os.path.dirname(abspath)
   os.chdir(dname)
 
-  method = sys.argv[1]
-  investment = sys.argv[2]
-  months = sys.argv[3]
-  
-  indexes = ['GOLD_SPOT.csv']
-  forecast(indexes, method, plot=False)
+  indexes = sys.argv[1:8]
+  method = sys.argv[8]
+  investment = sys.argv[9]
+  months = sys.argv[10]
+
+  # print("MAPE indexes ", indexes)
+  # # indexes = ['GOLD_SPOT.csv']
+  forecast(indexes, method, plot=True)
 
   print('MAPE Number of arguments:', len(sys.argv))
   print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   

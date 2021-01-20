@@ -31,7 +31,6 @@ def sarima(df,split,plot=False):
   exptest = np.exp(test)
   if (plot):
     plot_prediction(np.exp(df),expdata,expfore)
-
   # plt.plot(expfore,label= "forecast")
   
   # plt.plot(dataset,label='train')

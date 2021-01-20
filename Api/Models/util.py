@@ -11,8 +11,7 @@ def plot_prediction(dataset,train_p,test_p):
 
 def load_df (path,datesf):
   # data upload
-  
-  df = pd.read_csv("../"+path, header=0)
+  df = pd.read_csv("../"+path+".csv", header=0)
   # add date column
   # df['period']= datesf
   # df = df.set_index('period')

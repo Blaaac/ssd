@@ -15,8 +15,9 @@ namespace Api {
       PythonRunner PR = new PythonRunner (interpreter, environment, timeout);
       // Bitmap bmp = null;
       string attribute = indexes[0];
+      string ix = string.Join (" ", indexes);
       try {
-        string command = $"Models/forecast.py \"{method} {investment} {months}\"";
+        string command = $"Models/forecast.py \"{ix} {method} {investment} {months} \"";
         string list = PR.runDosCommands (command);
         if (string.IsNullOrWhiteSpace (list)) {
           Console.WriteLine ("error in script call");
