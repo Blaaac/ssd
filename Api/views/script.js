@@ -17,12 +17,30 @@ function subm(params) {
   fetch(
     "http://localhost:5000/api/fin/?" +
       new URLSearchParams({
-        capital: cash,
+        investment: cash,
         months: months,
       })
   )
     .then((response) => response.json())
-    .then((data) => console.log(data));
+    .then((data) => readResult(JSON.stringify(data)));
+}
+
+function readResult(str) {
+  document.getElementById("txtarea").value = str;
+  console.log(str);
+}
+
+function showResult(res) {
+  document.getElementById("txtarea").value += res.text;
+  renderImage(res.img);
+}
+function renderImage(b64imgstr) {
+  var b64 = b64imgstr;
+  b64 = b64.substring(0, b64.length - 1);
+  b64 = b64.substring(2, b64.length);
+  var image = new Image();
+  image.src = "data:image/png;base64," + b64;
+  document.body.appendChild(image);
 }
 
 function findAll() {

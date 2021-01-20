@@ -1,28 +1,11 @@
 import pandas as pd, numpy as np, os, sys
 
 
-
+import matplotlib as plt
 from lstm import lstm_predict
-from util import  load_df
-from sarima import sarima
+from util import  load_df, forecast_accuracy
+from arima import arima
 
-
-
-def preProcess(df, split):
-  # data = df[df.columns[0]].to_numpy()
-  # array of index data
-  print(np.log(df))
-  df[df.columns[0]] = np.log(df[df.columns[0]])
-  print(df)
-  # log transform
-  # logdata = np.log(data)
-  # data = pd.Series(logdata)
-
-  # plt.rcParams["figure.figsize"] = (10,8) # redefines figure size
-  train = df[:-split]
-  test = df[-split:]
-
-  return train, test
 
 
 
@@ -35,19 +18,30 @@ def forecast (indexes,method, months=24,plot=False):
   # datesf = pd.read_csv('Data.csv',header=0)
   # datesf = pd.to_datetime(datesf['Data'])
   predictor = lambda: None
+  forecasts = pd.DataFrame()
+  accuracies = {}
   if (method == "sarima"):
   # auto arima
-    predictor = sarima
+    predictor = arima
   elif (method == "lstm"): 
   # LSTM
     predictor = lstm_predict
   for index in indexes:
     df = load_df(index,0)
+
+ 
+
     # df = np.log(df)
     # train = df[:-split]
     # test = df[-split:]
     # print(df[df.columns[0]])
-    predictor(df,split,plot=plot)
+    res, test = predictor(df,split,plot=plot)
+    accuracies[index] = forecast_accuracy(res.values,test.values)
+    forecasts = pd.concat([forecasts,res],1)
+    
+
+  # print(forecasts.head(n=20))
+  return forecasts, accuracies
 
 
 
@@ -66,11 +60,11 @@ if __name__ == "__main__":
   months = sys.argv[10]
 
   # print("MAPE indexes ", indexes)
-  # # indexes = ['GOLD_SPOT.csv']
-  forecast(indexes, method, plot=True)
-
+  indexes = ['GOLD_SPOT']
+  fore, acc = forecast(indexes, method, plot=True)
+  print(acc)
   print('MAPE Number of arguments:', len(sys.argv))
-  print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
+  # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
      
 
 

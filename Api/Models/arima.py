@@ -3,7 +3,7 @@ from statsmodels.tsa.stattools import acf
 import numpy as np
 import pandas as pd
 from util import plot_prediction
-def sarima(df,split,plot=False):
+def arima(df,split,plot=False):
   df = np.log(df)
   train = df[:-split]
   test = df[-split:]
@@ -31,6 +31,8 @@ def sarima(df,split,plot=False):
   exptest = np.exp(test)
   if (plot):
     plot_prediction(np.exp(df),expdata,expfore)
+  score =0
+  return expfore,exptest
   # plt.plot(expfore,label= "forecast")
   
   # plt.plot(dataset,label='train')

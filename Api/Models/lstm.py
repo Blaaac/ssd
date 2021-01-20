@@ -106,4 +106,4 @@ def lstm_predict(dataframe, split,log_t=False,plot=False):
     # plot baseline and predictions
     plot_prediction(dataset,trainPredictPlot,testPredictPlot)
 
-  return testScore, testPredict
+  return testPredict, testY
