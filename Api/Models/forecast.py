@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
-from opt import init_portfolios
+from opt import init_portfolios, initial_capital
 
 
 
@@ -78,6 +78,8 @@ if __name__ == "__main__":
   # fore, acc = forecast(indexes, method, plot=False)
   initial_p = init_portfolios(indexes)
   print(initial_p)
+  cap_p = initial_capital(initial_p,investment)
+  print(cap_p)
   # print(acc)
   print('MAPE Number of arguments:', len(sys.argv))
   # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   

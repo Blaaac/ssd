@@ -8,3 +8,6 @@ def init_portfolios(indices):
   for i in range(len(indices)):
     weights[indices[i]] = w[i]
   return weights
+
+def initial_capital(portfolio,capital):
+  return {k: float(capital)*v for k, v in portfolio.items()}
