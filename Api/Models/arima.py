@@ -32,7 +32,7 @@ def arima(df,split,plot=False):
   if (plot):
     plot_prediction(np.exp(df),expdata,expfore)
   score =0
-  return expfore,exptest
+  return expfore, exptest
   # plt.plot(expfore,label= "forecast")
   
   # plt.plot(dataset,label='train')

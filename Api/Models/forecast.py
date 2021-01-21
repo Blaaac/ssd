@@ -1,10 +1,11 @@
 import pandas as pd, numpy as np, os, sys
 
 
-import matplotlib as plt
+import matplotlib.pyplot as plt
 from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
+from opt import init_portfolios
 
 
 
@@ -19,6 +20,7 @@ def forecast (indexes,method, months=24,plot=False):
   # datesf = pd.to_datetime(datesf['Data'])
   predictor = lambda: None
   forecasts = pd.DataFrame()
+  test_vals = pd.DataFrame()
   accuracies = {}
   if (method == "sarima"):
   # auto arima
@@ -26,23 +28,35 @@ def forecast (indexes,method, months=24,plot=False):
   elif (method == "lstm"): 
   # LSTM
     predictor = lstm_predict
-  for index in indexes:
-    df = load_df(index,0)
-
- 
-
-    # df = np.log(df)
-    # train = df[:-split]
-    # test = df[-split:]
-    # print(df[df.columns[0]])
+  for indice in indexes:
+    df = load_df(indice,0)
     res, test = predictor(df,split,plot=plot)
-    accuracies[index] = forecast_accuracy(res.values,test.values)
-    forecasts = pd.concat([forecasts,res],1)
+    accuracies[indice] = forecast_accuracy(res.values,test.values)
+    res.columns = [indice]
+    test.columns = [indice]
+    test_vals = pd.concat((test_vals,test),axis=1)
+    forecasts = pd.concat((forecasts,res),axis=1)
+  
+
+
+  test_vals = test_vals.pct_change().iloc[1:]
+  varss = forecasts.pct_change().iloc[1:]
+
+  plot_percent(varss)
+  plot_percent(test_vals)
+  print(varss)
     
 
   # print(forecasts.head(n=20))
   return forecasts, accuracies
 
+def plot_percent(returns):
+  plt.figure(figsize=(14, 7))
+  for c in returns.columns.values:
+      plt.plot(returns.index, returns[c], lw=3, alpha=0.8,label=c)
+  plt.legend(loc='upper right', fontsize=12)
+  plt.ylabel('daily returns')
+  plt.show()
 
 
 
@@ -60,9 +74,11 @@ if __name__ == "__main__":
   months = sys.argv[10]
 
   # print("MAPE indexes ", indexes)
-  indexes = ['GOLD_SPOT']
-  fore, acc = forecast(indexes, method, plot=True)
-  print(acc)
+  # indexes = ['GOLD_SPOT','SP_500']
+  # fore, acc = forecast(indexes, method, plot=False)
+  initial_p = init_portfolios(indexes)
+  print(initial_p)
+  # print(acc)
   print('MAPE Number of arguments:', len(sys.argv))
   # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
      

@@ -11,7 +11,6 @@ def plot_prediction(dataset,train_p,test_p):
   plt.legend()
   plt.show()
 
-
 def load_df (path,datesf):
   # data upload
   df = pd.read_csv("../"+path+".csv", header=0)
@@ -34,4 +33,6 @@ def forecast_accuracy(forecast, actual):
   return({'mape':mape, 'me':me, 'mae': mae,
           'mpe': mpe, 'rmse':rmse, 'acf1':acf1,
           'corr':corr, 'minmax':minmax})
+
+
 
