@@ -41,7 +41,7 @@ def moving_avg(portfolio, days=20):
   return portfolio.rolling(days).mean().dropna()
   
 def portfolio_return(portfolio, days=20):
-  return portfolio.tail(days).mean()
+  return portfolio.tail(days).mean().sum()
 
 
 def portfolio_risk(portfolio,moving_avg,days=20):
