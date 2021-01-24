@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
-from opt import init_portfolio, initial_capital, capital_variation, portfolio_var, portfolio_value
+from opt import init_portfolio, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
 
 
 
@@ -29,7 +29,7 @@ def forecast (indexes,method, months=24,plot=False):
   # LSTM
     predictor = lstm_predict
   for indice in indexes:
-    df = load_df(indice,0)
+    df = load_df(indice)
     res, test = predictor(df,split,plot=plot)
     accuracies[indice] = forecast_accuracy(res.values,test.values)
     res.columns = [indice]
@@ -74,21 +74,29 @@ if __name__ == "__main__":
   months = sys.argv[10]
 
   # print("MAPE indexes ", indexes)
-  indexes = ['GOLD_SPOT','SP_500','a','v','s','b']
-  # fore, acc = forecast(indexes, method, plot=False)
-  initial_p = init_portfolio(indexes)
-  print(initial_p)
-  # cap_p = initial_capital(initial_p,investment)
-  # print(cap_p)
+  indexes = ['GOLD_SPOT','SP_500']
+  fore, acc = forecast(indexes, method, plot=False)
+  portfolio_subdiv = init_portfolio(indexes)
+  # print(portfolio_subdiv)
+  initial_cap_split = initial_capital(portfolio_subdiv,investment)
+  # print(initial_cap_split)
 
-  # varss = fore.pct_change().iloc[1:]
-  # print(varss)
-  # cap = capital_variation(cap_p,varss)
-  # print(cap)
-  # tot_val = portfolio_value(cap)
-  # pctch =portfolio_var(cap)
-  # print(tot_val)
-  # print(pctch)
+  index_pct = index_pct(fore)
+  # print(index_pct)
+  portfolio_values = capital_variation(initial_cap_split,index_pct)
+  # print(portfolio_values)
+  portfolio_pct =portfolio_var(portfolio_values)
+  portfolio_tot = portfolio_value(portfolio_values)
+
+  portfolio_ma = moving_avg(portfolio_values)
+  print(portfolio_ma)
+  port_ret = portfolio_return(portfolio_values)
+  print(port_ret)
+
+  risk = portfolio_risk(portfolio_values,portfolio_ma)
+  print(risk)
+  # print(portfolio_val)
+  # print(portfolio_pct)
   # print(acc)
   print('MAPE Number of arguments:', len(sys.argv))
   # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   

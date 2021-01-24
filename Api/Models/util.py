@@ -11,7 +11,7 @@ def plot_prediction(dataset,train_p,test_p):
   plt.legend()
   plt.show()
 
-def load_df (path,datesf):
+def load_df (path):
   # data upload
   df = pd.read_csv("../"+path+".csv", header=0)
   # add date column
@@ -33,6 +33,18 @@ def forecast_accuracy(forecast, actual):
   return({'mape':mape, 'me':me, 'mae': mae,
           'mpe': mpe, 'rmse':rmse, 'acf1':acf1,
           'corr':corr, 'minmax':minmax})
+# import os
+# abspath = os.path.abspath(__file__)
+# dname = os.path.dirname(abspath)
+# os.chdir(dname)
 
+# df = load_df("GOLD_SPOT")
+# dh=df
+# # dh = df.asfreq('W')
+# import statsmodels.api as sm
 
+# decomposition = sm.tsa.seasonal_decompose(dh['GOLD_SPOT'], model='additive', 
+#                             extrapolate_trend='freq',period=21) #additive or multiplicative is data specific
+# fig = decomposition.plot()
+# plt.show()
 
