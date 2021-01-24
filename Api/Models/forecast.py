@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
-from opt import init_portfolio, initial_capital, capital_variation
+from opt import init_portfolio, initial_capital, capital_variation, portfolio_var, portfolio_value
 
 
 
@@ -74,17 +74,21 @@ if __name__ == "__main__":
   months = sys.argv[10]
 
   # print("MAPE indexes ", indexes)
-  indexes = ['GOLD_SPOT','SP_500']
-  fore, acc = forecast(indexes, method, plot=False)
+  indexes = ['GOLD_SPOT','SP_500','a','v','s','b']
+  # fore, acc = forecast(indexes, method, plot=False)
   initial_p = init_portfolio(indexes)
-  # print(initial_p)
-  cap_p = initial_capital(initial_p,investment)
-  print(cap_p)
+  print(initial_p)
+  # cap_p = initial_capital(initial_p,investment)
+  # print(cap_p)
 
-  varss = fore.pct_change().iloc[1:]
-  print(varss)
-  aaa = capital_variation(cap_p,varss)
-  print(aaa)
+  # varss = fore.pct_change().iloc[1:]
+  # print(varss)
+  # cap = capital_variation(cap_p,varss)
+  # print(cap)
+  # tot_val = portfolio_value(cap)
+  # pctch =portfolio_var(cap)
+  # print(tot_val)
+  # print(pctch)
   # print(acc)
   print('MAPE Number of arguments:', len(sys.argv))
   # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
