@@ -51,8 +51,27 @@ def portfolio_risk(portfolio,moving_avg,days=20):
   #   b = port[index]
   return mean_squared_error(moving_avg,port,squared=False)#check order
   
+def compute(fore,capital):
+  indices = fore.columns.tolist()
+  port_split = init_portfolio(indices)
+  cap_split = initial_capital(port_split,capital)
+  return capital_variation(cap_split,index_pct(fore))
 
+def compute_risk(fore,capital):
+  portfolio_val = compute(fore,capital)
 
+  # portfolio_pct =portfolio_var(portfolio_val)
+  # portfolio_tot = portfolio_value(portfolio_val)
+  # portfolio_ma = moving_avg(portfolio_val)
+  return portfolio_risk(portfolio_val)
+
+def compute_return(indices,capital):
+  portfolio_val = compute(fore,capital)
+
+  # portfolio_pct =portfolio_var(portfolio_val)
+  # portfolio_tot = portfolio_value(portfolio_val)
+  portfolio_ma = moving_avg(portfolio_val)
+  return portfolio_return(portfolio_val,portfolio_ma)
 
 
 # init_portfolio([1,2,33,4,4])

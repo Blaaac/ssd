@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
-from opt import init_portfolio, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
+from opt import init_portfolio,compute_risk, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
 
 
 
@@ -76,6 +76,7 @@ if __name__ == "__main__":
   # print("MAPE indexes ", indexes)
   indexes = ['GOLD_SPOT','SP_500']
   fore, acc = forecast(indexes, method, plot=False)
+  print(fore.columns)
   portfolio_subdiv = init_portfolio(indexes)
   # print(portfolio_subdiv)
   initial_cap_split = initial_capital(portfolio_subdiv,investment)
@@ -94,6 +95,8 @@ if __name__ == "__main__":
   print(port_ret)
 
   risk = portfolio_risk(portfolio_values,portfolio_ma)
+  print(risk)
+  risk = compute_risk(fore,investment)
   print(risk)
   # print(portfolio_val)
   # print(portfolio_pct)
