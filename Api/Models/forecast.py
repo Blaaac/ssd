@@ -2,7 +2,7 @@ import pandas as pd, numpy as np, os, sys
 
 
 import matplotlib.pyplot as plt
-from lstm import lstm_predict
+# from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
 from opt import init_portfolio,compute_risk, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
@@ -25,9 +25,9 @@ def forecast (indexes,method, months=24,plot=False):
   if (method == "sarima"):
   # auto arima
     predictor = arima
-  elif (method == "lstm"): 
+  # elif (method == "lstm"): 
   # LSTM
-    predictor = lstm_predict
+    # predictor = lstm_predict
   for indice in indexes:
     df = load_df(indice)
     res, test = predictor(df,split,plot=plot)
