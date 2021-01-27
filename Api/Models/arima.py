@@ -3,8 +3,9 @@ from statsmodels.tsa.stattools import acf
 import statsmodels as sm
 import numpy as np
 import pandas as pd
-from util import plot_prediction
+from util import plot_prediction, forecast_accuracy
 import matplotlib.pyplot as plt
+
 
 def fit_arima(df,split,order,plot=False):
   df = np.log(df)
@@ -28,11 +29,14 @@ def arima(df,split,plot=False):
   train = df[:-split]
   test = df[-split:]
   model = pm.auto_arima(train.values, start_p=1, start_q=1,
-                            test='adf', max_p=3, max_q=3, seasonal=False,#m=21,
-                            d=None, D=0, trace=True,
+                            #test='adf', 
+                            max_p=3, max_q=3, seasonal=False,
+                            trace=True,
+                           # random=True,
+                            # maxiter=200,
                             error_action='ignore',
                             suppress_warnings=True,
-                            stepwise=True) # False full grid
+                            stepwise=False) # False full grid
 
   print(model.summary())
   morder = model.order
@@ -46,8 +50,10 @@ def arima(df,split,plot=False):
   # recostruction
   expdata = pd.DataFrame(np.exp(ypred),index=train.index)
   # unlog
+  a =np.exp(yfore)
   expfore = pd.DataFrame(np.exp(yfore),index=test.index)
   exptrain = np.exp(train)
+  # exptest = pd.DataFrame(np.exp(test),index=test.index)
   exptest = np.exp(test)
   if (plot):
     plot_prediction(np.exp(df),expdata,expfore)

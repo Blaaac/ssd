@@ -7,7 +7,34 @@ from util import  load_df, forecast_accuracy
 from arima import arima
 from opt import init_portfolio,compute_risk, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
 
-
+def test_stationarity(timeseries):
+  from statsmodels.tsa.stattools import adfuller 
+  
+  #Determining rolling statistics
+  rolmean = timeseries.rolling(4).mean() # around 4 weeks on each month
+  rolstd = timeseries.rolling(4).std()
+  
+  #Plot rolling statistics:
+  orig = plt.plot(timeseries, color='blue',label='Original')
+  mean = plt.plot(rolmean, color='red', label='Rolling Mean')
+  std = plt.plot(rolstd, color='black', label = 'Rolling Std')
+  plt.legend(loc='best')
+  plt.title('Rolling Mean & Standard Deviation')
+  plt.show(block=False)
+  
+  #Perform Dickey-Fuller test:
+  print ('Results of Dickey-Fuller Test:')
+  dftest = adfuller(timeseries, autolag='AIC')
+  dfoutput = pd.Series(dftest[0:4], index=['Test Statistic','p-value','#Lags Used','Number of Observations Used'])
+  for key,value in dftest[4].items():
+    dfoutput['Critical Value (%s)'%key] = value
+  print (dfoutput)
+  
+  if dfoutput['p-value'] < 0.05:
+      print('result : time series is stationary')
+  else : print('result : time series is not stationary')
+  from matplotlib.pylab import rcParams 
+  rcParams['figure.figsize'] = 20,10
 
 
 
@@ -30,6 +57,8 @@ def forecast (indexes,method, months=24,plot=False):
     predictor = lstm_predict
   for indice in indexes:
     df = load_df(indice)
+    # test_stationarity(df)
+   
     res, test = predictor(df,split,plot=plot)
     accuracies[indice] = forecast_accuracy(res.values,test.values)
     res.columns = [indice]
@@ -75,34 +104,39 @@ if __name__ == "__main__":
 
   # print("MAPE indexes ", indexes)
   indexes = ['GOLD_SPOT','SP_500']
-  fore, acc = forecast(indexes, method, plot=False)
-  print(fore.columns)
-  portfolio_subdiv = init_portfolio(indexes)
-  # print(portfolio_subdiv)
-  initial_cap_split = initial_capital(portfolio_subdiv,investment)
-  # print(initial_cap_split)
+  fore, acc = forecast(indexes, method, plot=False)#months to int
+  print(acc)
+  # print(fore.columns)
+  # portfolio_subdiv = init_portfolio(indexes)
+  # # print(portfolio_subdiv)
+  # initial_cap_split = initial_capital(portfolio_subdiv,investment)
+  # # print(initial_cap_split)
 
-  index_pct = index_pct(fore)
-  # print(index_pct)
-  portfolio_values = capital_variation(initial_cap_split,index_pct)
-  # print(portfolio_values)
-  portfolio_pct =portfolio_var(portfolio_values)
-  portfolio_tot = portfolio_value(portfolio_values)
+  # index_pct = index_pct(fore)
+  # # print(index_pct)
+  # portfolio_values = capital_variation(initial_cap_split,index_pct)
+  # # print(portfolio_values)
+  # portfolio_pct =portfolio_var(portfolio_values)
+  # portfolio_tot = portfolio_value(portfolio_values)
 
-  portfolio_ma = moving_avg(portfolio_values)
-  print(portfolio_ma)
-  port_ret = portfolio_return(portfolio_values)
-  print(port_ret)
+  # portfolio_ma = moving_avg(portfolio_values)
+  # print(portfolio_ma)
+  # port_ret = portfolio_return(portfolio_values)
+  # print(port_ret)
 
-  risk = portfolio_risk(portfolio_values,portfolio_ma)
-  print(risk)
-  risk = compute_risk(fore,investment)
-  print(risk)
+  # risk = portfolio_risk(portfolio_values,portfolio_ma)
+  # print(risk)
+  # risk = compute_risk(fore,investment)
+  # print(risk)
   # print(portfolio_val)
   # print(portfolio_pct)
   # print(acc)
   print('MAPE Number of arguments:', len(sys.argv))
   # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
+
+
+  
+  
      
 
 
