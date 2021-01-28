@@ -8,11 +8,14 @@ function submit(params) {
 }
 
 function subm(params) {
-  var months = document.querySelector("#months").innerHTML;
+  var months = +document.querySelector("#months").innerHTML;
   console.log(months);
 
-  var cash = document.querySelector("#cash").innerHTML;
+  var cash = +document.querySelector("#cash").innerHTML;
   console.log(cash);
+
+  var risk = +document.querySelector("#risk").innerHTML;
+  console.log(risk);
 
   fetch(
     "http://localhost:5000/api/fin/?" +
