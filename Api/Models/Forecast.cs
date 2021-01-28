@@ -9,6 +9,7 @@ namespace Api {
     }
     public string forecastIndexes (string method, string[] indexes, int investment, int months, int other) {
       string res = "\"text\":\"";
+      string json = "";
       string interpreter = "/home/ruben/anaconda3/bin/python";
       string environment = "opanalytics";
       int timeout = 10000;
@@ -40,6 +41,10 @@ namespace Api {
             double fcast = Convert.ToDouble (s.Substring (s.LastIndexOf (" ")));
             Console.WriteLine (fcast);
           }
+          if (s.StartsWith ("PORTFOLIO")) {
+            Console.Write (s);
+            json += s;
+          }
         }
         // Console.Write (strBitMap);
         // strBitMap = strBitMap.Substring (strBitMap.IndexOf ("b'"));
@@ -54,8 +59,8 @@ namespace Api {
       }
 
       lend:
-
-        return res;
+        Console.WriteLine (json);
+      return res;
 
     }
 

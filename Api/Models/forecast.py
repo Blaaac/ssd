@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
-from opt import init_portfolio,compute_risk,compute_return, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
-
+from opt import array_to_portfolio,gen_port,init_portfolio,compute_risk_return_nocap, compute_risk,compute_return, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
+import pso
 def test_stationarity(timeseries):
   from statsmodels.tsa.stattools import adfuller 
   
@@ -99,12 +99,12 @@ if __name__ == "__main__":
 
   indexes = sys.argv[1:8]
   method = sys.argv[8]
-  investment = sys.argv[9]
-  months = sys.argv[10]
+  investment = float(sys.argv[9])
+  months = int(sys.argv[10])
 
   # print("MAPE indexes ", indexes)
   indexes = ['GOLD_SPOT','SP_500']
-  fore, acc, t = forecast(indexes, method, plot=False)#months to int
+  fore, acc, t = forecast(indexes, method, months, plot=False)#months to int
   print(acc)
   # print(fore.columns)
   # portfolio_subdiv = init_portfolio(indexes)
@@ -122,13 +122,26 @@ if __name__ == "__main__":
   # portfolio_ma = moving_avg(portfolio_values)
   # print(portfolio_ma)
   # port_ret = portfolio_return(portfolio_values)
-  port_ret = compute_return(fore,investment)
-  print(port_ret)
+  # port_ret = compute_return(fore,investment)
+  # print(port_ret)
 
-  # risk = portfolio_risk(portfolio_values,portfolio_ma)
+  # # risk = portfolio_risk(portfolio_values,portfolio_ma)
+  # # print(risk)
+  # risk = compute_risk(fore,investment)
   # print(risk)
-  risk = compute_risk(fore,investment)
-  print(risk)
+  # risk, ret = compute_risk_return_nocap(fore,port_split)
+  # print(ret*investment)
+  # print(risk*investment)
+
+
+  mypso = pso.PSO(indexes=fore,fitness_func=compute_risk_return_nocap,
+                        init_func=gen_port,
+                        numvar=len(indexes))
+  res = mypso.pso_solve(popsize=10,
+                        niter=30,
+                        nhood_size=5)
+  port = array_to_portfolio(res,indexes)
+  print("PORTFOLIO"+port.to_json(orient='records'))
   # print(portfolio_val)
   # print(portfolio_pct)
   # print(acc)
