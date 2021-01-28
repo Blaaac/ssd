@@ -6,6 +6,7 @@ def index_pct(indexes):
   return indexes.pct_change()#.iloc[1:]
 
 def init_portfolio(indices):
+  np.random.seed(1)
   weights = {}
   w = np.random.uniform(low=0.05,high=1,size=len(indices))
   # w = np.random.random(len(indices))
@@ -62,16 +63,16 @@ def compute_risk(fore,capital):
 
   # portfolio_pct =portfolio_var(portfolio_val)
   # portfolio_tot = portfolio_value(portfolio_val)
-  # portfolio_ma = moving_avg(portfolio_val)
-  return portfolio_risk(portfolio_val)
+  portfolio_ma = moving_avg(portfolio_val)
+  return portfolio_risk(portfolio_val,portfolio_ma)
 
-def compute_return(indices,capital):
+def compute_return(fore,capital):
   portfolio_val = compute(fore,capital)
 
   # portfolio_pct =portfolio_var(portfolio_val)
   # portfolio_tot = portfolio_value(portfolio_val)
-  portfolio_ma = moving_avg(portfolio_val)
-  return portfolio_return(portfolio_val,portfolio_ma)
+  # portfolio_ma = moving_avg(portfolio_val)
+  return portfolio_return(portfolio_val)
 
 
 # init_portfolio([1,2,33,4,4])

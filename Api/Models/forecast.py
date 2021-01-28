@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
-from opt import init_portfolio,compute_risk, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
+from opt import init_portfolio,compute_risk,compute_return, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
 
 def test_stationarity(timeseries):
   from statsmodels.tsa.stattools import adfuller 
@@ -77,7 +77,7 @@ def forecast (indexes,method, months=24,plot=False):
     
 
   # print(forecasts.head(n=20))
-  return forecasts, accuracies
+  return forecasts, accuracies, test_vals
 
 def plot_percent(returns):
   plt.figure(figsize=(14, 7))
@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
   # print("MAPE indexes ", indexes)
   indexes = ['GOLD_SPOT','SP_500']
-  fore, acc = forecast(indexes, method, plot=False)#months to int
+  fore, acc, t = forecast(indexes, method, plot=False)#months to int
   print(acc)
   # print(fore.columns)
   # portfolio_subdiv = init_portfolio(indexes)
@@ -122,12 +122,13 @@ if __name__ == "__main__":
   # portfolio_ma = moving_avg(portfolio_values)
   # print(portfolio_ma)
   # port_ret = portfolio_return(portfolio_values)
-  # print(port_ret)
+  port_ret = compute_return(fore,investment)
+  print(port_ret)
 
   # risk = portfolio_risk(portfolio_values,portfolio_ma)
   # print(risk)
-  # risk = compute_risk(fore,investment)
-  # print(risk)
+  risk = compute_risk(fore,investment)
+  print(risk)
   # print(portfolio_val)
   # print(portfolio_pct)
   # print(acc)
