@@ -24,13 +24,13 @@ namespace Api {
 
         // GET: api/Fin
         [HttpGet]
-        public string GetAllIndexes ([FromQuery] int investment = 1000, [FromQuery] int months = 6, [FromQuery] int other = 0) {
+        public string GetAllIndexes ([FromQuery] int investment = 1000, [FromQuery] int months = 6, [FromQuery] float risk_w = 0) {
             foreach (string attribute in indices) {
                 var index = P.readIndex (attribute);
             }
             string res = "{";
             Forecast F = new Forecast ();
-            res += F.forecastIndexes ("sarima", indices, investment, months, other);
+            res += F.forecastIndexes ("sarima", indices, investment, months, risk_w);
             res += "}";
             return res;
         }

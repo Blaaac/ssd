@@ -84,12 +84,12 @@ def compute_return(fore,capital):
   # portfolio_ma = moving_avg(portfolio_val)
   return portfolio_return(portfolio_val)
 
-def compute_risk_return_nocap(fore,portfolio_split):
-  w1=0.5
-  w2=0.5
+def compute_risk_return_nocap(fore,weight,portfolio_split):
+  w1=weight
+  w2=1-weight
   portfolio_val = compute(fore,1,portfolio_split)
   portfolio_ma = moving_avg(portfolio_val)
-  return 1/portfolio_risk(portfolio_val,portfolio_ma)+ portfolio_return(portfolio_val)
+  return w1*1/portfolio_risk(portfolio_val,portfolio_ma)+ w2*portfolio_return(portfolio_val)
 
 
 

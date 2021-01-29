@@ -101,7 +101,10 @@ if __name__ == "__main__":
   method = sys.argv[8]
   investment = float(sys.argv[9])
   months = int(sys.argv[10])
+  risk_w = float(sys.argv[11])
 
+  print('MAPE Number of arguments:', len(sys.argv))
+  print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
   # print("MAPE indexes ", indexes)
   indexes = ['GOLD_SPOT','SP_500']
   fore, acc, t = forecast(indexes, method, months, plot=False)#months to int
@@ -136,6 +139,7 @@ if __name__ == "__main__":
 
   mypso = pso.PSO(indexes=fore,fitness_func=compute_risk_return_nocap,
                         init_func=gen_port,
+                        weight= risk_w,
                         numvar=len(indexes))
   res = mypso.pso_solve(popsize=10,
                         niter=30,
@@ -145,8 +149,6 @@ if __name__ == "__main__":
   # print(portfolio_val)
   # print(portfolio_pct)
   # print(acc)
-  print('MAPE Number of arguments:', len(sys.argv))
-  # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
 
 
   

@@ -22,6 +22,7 @@ function subm(params) {
       new URLSearchParams({
         investment: cash,
         months: months,
+        risk_w: risk,
       })
   )
     .then((response) => response.json())

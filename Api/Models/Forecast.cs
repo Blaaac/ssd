@@ -7,7 +7,7 @@ namespace Api {
     public Forecast () {
 
     }
-    public string forecastIndexes (string method, string[] indexes, int investment, int months, int other) {
+    public string forecastIndexes (string method, string[] indexes, int investment, int months, float risk_w) {
       string res = "\"text\":\"";
       string json = "";
       string interpreter = "/home/ruben/anaconda3/bin/python";
@@ -18,7 +18,7 @@ namespace Api {
       string attribute = indexes[0];
       string ix = string.Join (" ", indexes);
       try {
-        string command = $"Models/forecast.py \"{ix} {method} {investment} {months} \"";
+        string command = $"Models/forecast.py \"{ix} {method} {investment} {months} {risk_w} \"";
         string list = PR.runDosCommands (command);
         if (string.IsNullOrWhiteSpace (list)) {
           Console.WriteLine ("error in script call");
@@ -46,6 +46,7 @@ namespace Api {
             json += s;
           }
         }
+        res += json;
         // Console.Write (strBitMap);
         // strBitMap = strBitMap.Substring (strBitMap.IndexOf ("b'"));
         res += "\"";

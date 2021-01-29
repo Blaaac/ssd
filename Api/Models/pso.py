@@ -14,10 +14,11 @@ class Particle:
 
 ''' Particie swarm optimization ''' 
 class PSO:
-  def __init__(self,indexes,fitness_func, init_func, numvar,xmin=0.05,xmax=1):
+  def __init__(self,indexes,fitness_func, init_func, numvar,weight,xmin=0.05,xmax=1):
     self.c0 = 0.25 # velocity coefficient
     self.c1 = 1.5
     self.c2 = 2.0
+    self.weight = weight
     self.fitbest = -np.inf
     self.xmin = xmin
     self.xmax = xmax
@@ -46,7 +47,7 @@ class PSO:
         pop[i].xbest[j] = pop[i].x[j]
         pop[i].nxbest[j] = pop[i].x[j]
     
-      pop[i].fit = self.fitness_func(self.indexes,pop[i].x)
+      pop[i].fit = self.fitness_func(self.indexes,self.weight,pop[i].x)
       pop[i].fitbest = pop[i].fit
       #	initialize neighborhood 
       for j in range(nhood_size):
@@ -83,7 +84,7 @@ class PSO:
         pop[i].x /= np.sum(pop[i].x)
 
         # update particle fitness
-        pop[i].fit = self.fitness_func(self.indexes,pop[i].x)
+        pop[i].fit = self.fitness_func(self.indexes,self.weight,pop[i].x)
     
         # update personal best position, min
         if (pop[i].fit > pop[i].fitbest):
