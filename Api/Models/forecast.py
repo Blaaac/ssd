@@ -150,6 +150,9 @@ if __name__ == "__main__":
 
   
   json=port.iloc[0].to_json(orient='index')
+  f = open("portfolio.json", "w")
+  f.write(json)
+  f.close()
   # print(type(aa))
   print("PORTFOLIO"+json.replace("\"","'"))
   # print(portfolio_val)
