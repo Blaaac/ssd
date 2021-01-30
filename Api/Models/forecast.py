@@ -106,7 +106,7 @@ if __name__ == "__main__":
   print('MAPE Number of arguments:', len(sys.argv))
   print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
   # print("MAPE indexes ", indexes)
-  indexes = ['GOLD_SPOT','SP_500']
+  indexes = ['GOLD_SPOT']#,'SP_500']
   fore, acc, t = forecast(indexes, method, months, plot=False)#months to int
   print(acc)
   # print(fore.columns)
@@ -144,8 +144,14 @@ if __name__ == "__main__":
   res = mypso.pso_solve(popsize=10,
                         niter=30,
                         nhood_size=5)
-  port = array_to_portfolio(res,indexes)
-  print("PORTFOLIO"+port.to_json(orient='records'))
+  json_indexes =["S&P_500_INDEX","FTSE_MIB_INDEX","GOLD_SPOT_$_OZ","MSCI_EM","MSCI_EURO","All_Bonds_TR","U.S._Treasury"]
+  port = array_to_portfolio(res,json_indexes)
+  port.insert(0, "horizon", months)
+
+  
+  json=port.iloc[0].to_json(orient='index')
+  # print(type(aa))
+  print("PORTFOLIO"+json.replace("\"","'"))
   # print(portfolio_val)
   # print(portfolio_pct)
   # print(acc)

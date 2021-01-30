@@ -14,6 +14,7 @@ def gen_port(size):
   # print(w)
   return w
 
+
 def array_to_portfolio(w,indices):
   weights = {}
   for i in range(len(w)):

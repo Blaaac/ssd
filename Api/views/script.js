@@ -17,26 +17,71 @@ function subm(params) {
   var risk = +document.querySelector("#risk").innerHTML;
   console.log(risk);
 
-  fetch(
-    "http://localhost:5000/api/fin/?" +
+  $.ajax({
+    url:
+      "http://localhost:5000/api/fin/?" +
       new URLSearchParams({
         investment: cash,
         months: months,
         risk_w: risk,
-      })
-  )
-    .then((response) => response.json())
-    .then((data) => readResult(JSON.stringify(data)));
+      }),
+    type: "GET",
+    contentType: "application/json",
+    data: "",
+    success: function (result) {
+      console.log(result);
+      showResult(JSON.parse(result));
+    },
+    error: function (xhr, status, p3, p4) {
+      var err = "Error " + " " + status + " " + p3;
+      if (xhr.responseText && xhr.responseText[0] == "{")
+        err = JSON.parse(xhr.responseText).message;
+      alert(err);
+    },
+  });
+
+  // fetch(
+  //   "http://localhost:5000/api/fin/?" +
+  //     new URLSearchParams({
+  //       investment: cash,
+  //       months: months,
+  //       risk_w: risk,
+  //     })
+  //   // {
+  //   //   method: "GET",
+  //   //   headers: {
+  //   //     "Content-Type": "application/json",
+  //   //   },
+  //   // }
+  // )
+  //   .then(
+  //     (response) => {
+  //       console.log(response);
+  //       response.json();
+  //     }
+
+  //     // => {
+  //     //   console.log(response);
+  //     //   response.json();
+  //     // }
+  //   )
+  //   .then((data) => {
+  //     console.log(data);
+  //     readResult(JSON.stringify(data));
+  //   })
+  //   .catch(console.error);
 }
 
 function readResult(str) {
-  document.getElementById("txtarea").value = str;
   console.log(str);
+  document.getElementById("txtarea").value = str;
 }
 
 function showResult(res) {
+  console.log(res);
   document.getElementById("txtarea").value += res.text;
-  renderImage(res.img);
+  document.getElementById("port").value += res.portfolio;
+  // renderImage(res.img);
 }
 function renderImage(b64imgstr) {
   var b64 = b64imgstr;

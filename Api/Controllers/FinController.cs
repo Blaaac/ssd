@@ -8,6 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api {
+    public class Portfolio {
+        public string horizon { get; set; }
+        // public float S&P_500_INDEX {get;set;}
+        // public float FTSE_MIB_INDEX {get;set;}
+        // public float GOLD_SPOT_$_OZ {get;set;}
+        // public float MSCI_EM {get;set;}
+        // public float MSCI_EURO {get;set;}
+        // public float All_Bonds_TR {get;set;}
+        // public float U.S._Treasury {get;set;}
+
+    }
+
     [Route ("api/[controller]")]
     [ApiController]
     public class FinController : ControllerBase {
@@ -24,13 +36,14 @@ namespace Api {
 
         // GET: api/Fin
         [HttpGet]
-        public string GetAllIndexes ([FromQuery] int investment = 1000, [FromQuery] int months = 6, [FromQuery] float risk_w = 0) {
+        public string GetAllIndexes ([FromQuery] int investment = 1000, [FromQuery] int months = 6, [FromQuery] double risk_w = 0.5) {
             foreach (string attribute in indices) {
                 var index = P.readIndex (attribute);
             }
             string res = "{";
             Forecast F = new Forecast ();
             res += F.forecastIndexes ("sarima", indices, investment, months, risk_w);
+            // string json = F.forecastIndexes ("sarima", indices, investment, months, risk_w);
             res += "}";
             return res;
         }

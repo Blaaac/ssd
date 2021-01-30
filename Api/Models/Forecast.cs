@@ -7,12 +7,13 @@ namespace Api {
     public Forecast () {
 
     }
-    public string forecastIndexes (string method, string[] indexes, int investment, int months, float risk_w) {
+    public string forecastIndexes (string method, string[] indexes, int investment, int months, double risk_w) {
       string res = "\"text\":\"";
       string json = "";
       string interpreter = "/home/ruben/anaconda3/bin/python";
       string environment = "opanalytics";
       int timeout = 10000;
+      string portPrefix = "PORTFOLIO";
       PythonRunner PR = new PythonRunner (interpreter, environment, timeout);
       // Bitmap bmp = null;
       string attribute = indexes[0];
@@ -29,11 +30,11 @@ namespace Api {
         string strBitMap = "";
         foreach (string s in lines) {
           if (s.StartsWith ("MAPE")) {
-            Console.Write (s);
+            // Console.Write (s);
             res += s;
           }
           if (s.StartsWith ("b'")) {
-            Console.WriteLine ("aaaaaaaaaaaaaaaaaaa");
+            Console.WriteLine ("image");
             strBitMap = s.Trim ();
             break;
           }
@@ -41,15 +42,19 @@ namespace Api {
             double fcast = Convert.ToDouble (s.Substring (s.LastIndexOf (" ")));
             Console.WriteLine (fcast);
           }
-          if (s.StartsWith ("PORTFOLIO")) {
+          if (s.StartsWith (portPrefix)) {
             Console.Write (s);
             json += s;
           }
         }
-        res += json;
+        json = "\"portfolio\":\"" + json.Substring (portPrefix.Length);
+        json += "\"";
+
+        //res += json;
         // Console.Write (strBitMap);
         // strBitMap = strBitMap.Substring (strBitMap.IndexOf ("b'"));
         res += "\"";
+        res += "," + json;
         // res += ",\"img\":\"" + strBitMap + "\"";
 
         goto lend;
@@ -61,7 +66,8 @@ namespace Api {
 
       lend:
         Console.WriteLine (json);
-      return res;
+
+      return res; //json.Substring (portPrefix.Length);
 
     }
 
