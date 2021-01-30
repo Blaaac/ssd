@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
-from opt import array_to_portfolio,gen_port,init_portfolio,compute_risk_return_nocap, compute_risk,compute_return, initial_capital, capital_variation, portfolio_var, portfolio_value, index_pct, moving_avg, portfolio_return, portfolio_risk
+import json
+from opt import array_to_portfolio,compute_risk_return_nocap,gen_port
 import pso
 def test_stationarity(timeseries):
   from statsmodels.tsa.stattools import adfuller 
@@ -108,33 +109,7 @@ if __name__ == "__main__":
   # print("MAPE indexes ", indexes)
   indexes = ['GOLD_SPOT']#,'SP_500']
   fore, acc, t = forecast(indexes, method, months, plot=False)#months to int
-  print(acc)
-  # print(fore.columns)
-  # portfolio_subdiv = init_portfolio(indexes)
-  # # print(portfolio_subdiv)
-  # initial_cap_split = initial_capital(portfolio_subdiv,investment)
-  # # print(initial_cap_split)
-
-  # index_pct = index_pct(fore)
-  # # print(index_pct)
-  # portfolio_values = capital_variation(initial_cap_split,index_pct)
-  # # print(portfolio_values)
-  # portfolio_pct =portfolio_var(portfolio_values)
-  # portfolio_tot = portfolio_value(portfolio_values)
-
-  # portfolio_ma = moving_avg(portfolio_values)
-  # print(portfolio_ma)
-  # port_ret = portfolio_return(portfolio_values)
-  # port_ret = compute_return(fore,investment)
-  # print(port_ret)
-
-  # # risk = portfolio_risk(portfolio_values,portfolio_ma)
-  # # print(risk)
-  # risk = compute_risk(fore,investment)
-  # print(risk)
-  # risk, ret = compute_risk_return_nocap(fore,port_split)
-  # print(ret*investment)
-  # print(risk*investment)
+  
 
 
   mypso = pso.PSO(indexes=fore,fitness_func=compute_risk_return_nocap,
@@ -149,15 +124,14 @@ if __name__ == "__main__":
   port.insert(0, "horizon", months)
 
   
-  json=port.iloc[0].to_json(orient='index')
+  json_f=port.iloc[0].to_json(orient='index')
+  print("PORTFOLIO"+json_f.replace("\"","'"))
+  print("METRICS"+json.dumps(acc).replace("\"","'"))
   f = open("portfolio.json", "w")
-  f.write(json)
+  f.write(json_f)
   f.close()
-  # print(type(aa))
-  print("PORTFOLIO"+json.replace("\"","'"))
-  # print(portfolio_val)
-  # print(portfolio_pct)
-  # print(acc)
+
+
 
 
   

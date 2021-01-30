@@ -10,10 +10,12 @@ namespace Api {
     public string forecastIndexes (string method, string[] indexes, int investment, int months, double risk_w) {
       string res = "\"text\":\"";
       string json = "";
+      string metrics = "";
       string interpreter = "/home/ruben/anaconda3/bin/python";
       string environment = "opanalytics";
       int timeout = 10000;
       string portPrefix = "PORTFOLIO";
+      string metricsPrefix = "METRICS";
       PythonRunner PR = new PythonRunner (interpreter, environment, timeout);
       // Bitmap bmp = null;
       string attribute = indexes[0];
@@ -29,9 +31,9 @@ namespace Api {
         string[] lines = list.Split (new [] { Environment.NewLine }, StringSplitOptions.None);
         string strBitMap = "";
         foreach (string s in lines) {
-          if (s.StartsWith ("MAPE")) {
-            // Console.Write (s);
-            res += s;
+          if (s.StartsWith (metricsPrefix)) {
+            Console.Write (s);
+            metrics += s;
           }
           if (s.StartsWith ("b'")) {
             Console.WriteLine ("image");
@@ -47,6 +49,7 @@ namespace Api {
             json += s;
           }
         }
+        res += metrics.Substring (metricsPrefix.Length);
         json = "\"portfolio\":\"" + json.Substring (portPrefix.Length);
         json += "\"";
 

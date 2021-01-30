@@ -2,9 +2,6 @@ function submit(params) {
   console.log("submitting");
   const formData = new FormData(document.querySelector("form"));
   console.log(formData.entries());
-  // for (var pair of formData.entries()) {
-  //   console.log(pair[0] + ": " + pair[1]);
-  // }
 }
 
 function subm(params) {
@@ -39,37 +36,6 @@ function subm(params) {
       alert(err);
     },
   });
-
-  // fetch(
-  //   "http://localhost:5000/api/fin/?" +
-  //     new URLSearchParams({
-  //       investment: cash,
-  //       months: months,
-  //       risk_w: risk,
-  //     })
-  //   // {
-  //   //   method: "GET",
-  //   //   headers: {
-  //   //     "Content-Type": "application/json",
-  //   //   },
-  //   // }
-  // )
-  //   .then(
-  //     (response) => {
-  //       console.log(response);
-  //       response.json();
-  //     }
-
-  //     // => {
-  //     //   console.log(response);
-  //     //   response.json();
-  //     // }
-  //   )
-  //   .then((data) => {
-  //     console.log(data);
-  //     readResult(JSON.stringify(data));
-  //   })
-  //   .catch(console.error);
 }
 
 function readResult(str) {
@@ -79,8 +45,8 @@ function readResult(str) {
 
 function showResult(res) {
   console.log(res);
-  document.getElementById("txtarea").value += res.text;
-  document.getElementById("port").value += res.portfolio;
+  document.getElementById("txtarea").value = res.text;
+  document.getElementById("port").value = res.portfolio;
   // renderImage(res.img);
 }
 function renderImage(b64imgstr) {
