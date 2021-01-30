@@ -75,9 +75,7 @@ def compute_risk(fore,capital):
   portfolio_ma = moving_avg(portfolio_val)
   return portfolio_risk(portfolio_val,portfolio_ma)
 
-def compute_return(fore,capital):
-  indices = fore.columns.tolist()
-  port_split = init_portfolio(indices)
+def compute_return(fore,port_split,capital):
   portfolio_val = compute(fore,capital,port_split)
 
   # portfolio_pct =portfolio_var(portfolio_val)

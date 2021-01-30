@@ -6,7 +6,7 @@ from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
 import json
-from opt import array_to_portfolio,compute_risk_return_nocap,gen_port
+from opt import array_to_portfolio,compute_risk_return_nocap,gen_port,compute_return
 import pso
 def test_stationarity(timeseries):
   from statsmodels.tsa.stattools import adfuller 
@@ -66,18 +66,7 @@ def forecast (indexes,method, months=24,plot=False):
     test.columns = [indice]
     test_vals = pd.concat((test_vals,test),axis=1)
     forecasts = pd.concat((forecasts,res),axis=1)
-  
 
-
-  # test_vals = test_vals.pct_change().iloc[1:]
-  # varss = forecasts.pct_change().iloc[1:]
-
-  # plot_percent(varss)
-  # plot_percent(test_vals)
-  # print(varss)
-    
-
-  # print(forecasts.head(n=20))
   return forecasts, accuracies, test_vals
 
 def plot_percent(returns):
@@ -104,13 +93,12 @@ if __name__ == "__main__":
   months = int(sys.argv[10])
   risk_w = float(sys.argv[11])
 
-  print('MAPE Number of arguments:', len(sys.argv))
-  print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
-  # print("MAPE indexes ", indexes)
+  # print('MAPE Number of arguments:', len(sys.argv))
+  # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
+  # # print("MAPE indexes ", indexes)
   indexes = ['GOLD_SPOT']#,'SP_500']
   fore, acc, t = forecast(indexes, method, months, plot=False)#months to int
   
-
 
   mypso = pso.PSO(indexes=fore,fitness_func=compute_risk_return_nocap,
                         init_func=gen_port,
@@ -119,14 +107,17 @@ if __name__ == "__main__":
   res = mypso.pso_solve(popsize=10,
                         niter=30,
                         nhood_size=5)
+
   json_indexes =["S&P_500_INDEX","FTSE_MIB_INDEX","GOLD_SPOT_$_OZ","MSCI_EM","MSCI_EURO","All_Bonds_TR","U.S._Treasury"]
   port = array_to_portfolio(res,json_indexes)
+  port_ret = compute_return(fore,port,investment)
   port.insert(0, "horizon", months)
 
   
   json_f=port.iloc[0].to_json(orient='index')
   print("PORTFOLIO"+json_f.replace("\"","'"))
   print("METRICS"+json.dumps(acc).replace("\"","'"))
+  print("RESULTS"+port_ret)
   f = open("portfolio.json", "w")
   f.write(json_f)
   f.close()
