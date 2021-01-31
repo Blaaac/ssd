@@ -11,11 +11,13 @@ namespace Api {
       string res = "\"text\":\"";
       string json = "";
       string metrics = "";
+      string result = "";
       string interpreter = "/home/ruben/anaconda3/bin/python";
       string environment = "opanalytics";
       int timeout = 10000;
       string portPrefix = "PORTFOLIO";
       string metricsPrefix = "METRICS";
+      string resPrefix = "RESULT";
       PythonRunner PR = new PythonRunner (interpreter, environment, timeout);
       // Bitmap bmp = null;
       string attribute = indexes[0];
@@ -32,32 +34,42 @@ namespace Api {
         string strBitMap = "";
         foreach (string s in lines) {
           if (s.StartsWith (metricsPrefix)) {
-            Console.Write (s);
-            metrics += s;
+            Console.Write (s.Substring (metricsPrefix.Length));
+            metrics += s.Substring (metricsPrefix.Length);
           }
           if (s.StartsWith ("b'")) {
             Console.WriteLine ("image");
             strBitMap = s.Trim ();
             break;
           }
+          if (s.StartsWith (resPrefix)) {
+            Console.Write (s.Substring (resPrefix.Length));
+            result += s.Substring (resPrefix.Length);
+          }
           if (s.StartsWith ("Actual")) {
             double fcast = Convert.ToDouble (s.Substring (s.LastIndexOf (" ")));
             Console.WriteLine (fcast);
           }
           if (s.StartsWith (portPrefix)) {
-            Console.Write (s);
-            json += s;
+            Console.Write (s.Substring (portPrefix.Length));
+            json += s.Substring (portPrefix.Length);
           }
         }
-        res += metrics.Substring (metricsPrefix.Length);
-        json = "\"portfolio\":\"" + json.Substring (portPrefix.Length);
-        json += "\"";
+
+        res += metrics;
+        json = "\"portfolio\":\"" + json;
+        // json += "\"";
+
+        result = "\"result\":\"" + result + "\"";
 
         //res += json;
         // Console.Write (strBitMap);
         // strBitMap = strBitMap.Substring (strBitMap.IndexOf ("b'"));
         res += "\"";
         res += "," + json;
+        res += "\"";
+        res += "," + result;
+
         // res += ",\"img\":\"" + strBitMap + "\"";
 
         goto lend;
@@ -68,7 +80,7 @@ namespace Api {
       }
 
       lend:
-        Console.WriteLine (json);
+        Console.WriteLine (res);
 
       return res; //json.Substring (portPrefix.Length);
 

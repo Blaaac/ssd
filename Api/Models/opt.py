@@ -30,11 +30,13 @@ def initial_capital(portfolio,capital):
   return portfolio*float(capital)
 
 def capital_variation(initial_capital,pctchg):
-
+  # print(initial_capital)
   init = initial_capital#.iloc[0]
   pctchg = pctchg.reset_index(drop=True)
-  res = ((1 + pctchg).cumprod() * init)
+  res = ((1+ pctchg).cumprod() * init)
 
+  # print(pctchg)
+  # print(init)
   res.loc[-1] = init  
   res.index = res.index + 1  
   res.sort_index(inplace=True) 

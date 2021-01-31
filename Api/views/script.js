@@ -22,6 +22,10 @@ function subm(params) {
         months: months,
         risk_w: risk,
       }),
+    crossDomain: true,
+    xhrFields: {
+      withCredentials: true,
+    },
     type: "GET",
     contentType: "application/json",
     data: "",
@@ -47,6 +51,9 @@ function showResult(res) {
   console.log(res);
   document.getElementById("txtarea").value = res.text;
   document.getElementById("port").value = res.portfolio;
+  document.getElementById("actret").innerText = Number(res.result).toPrecision(
+    2
+  );
   // renderImage(res.img);
 }
 function renderImage(b64imgstr) {

@@ -2,7 +2,7 @@ import pandas as pd, numpy as np, os, sys
 
 
 import matplotlib.pyplot as plt
-from lstm import lstm_predict
+# from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
 import json
@@ -96,7 +96,7 @@ if __name__ == "__main__":
   # print('MAPE Number of arguments:', len(sys.argv))
   # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
   # # print("MAPE indexes ", indexes)
-  indexes = ['GOLD_SPOT']#,'SP_500']
+  indexes = ['SP_500']#,'GOLD_SPOT']
   fore, acc, t = forecast(indexes, method, months, plot=False)#months to int
   
 
@@ -110,14 +110,15 @@ if __name__ == "__main__":
 
   json_indexes =["S&P_500_INDEX","FTSE_MIB_INDEX","GOLD_SPOT_$_OZ","MSCI_EM","MSCI_EURO","All_Bonds_TR","U.S._Treasury"]
   port = array_to_portfolio(res,json_indexes)
-  port_ret = compute_return(fore,port,investment)
+  port2= array_to_portfolio(res,indexes)
+  port_ret = compute_return(fore,res,investment)
   port.insert(0, "horizon", months)
 
   
   json_f=port.iloc[0].to_json(orient='index')
   print("PORTFOLIO"+json_f.replace("\"","'"))
   print("METRICS"+json.dumps(acc).replace("\"","'"))
-  print("RESULTS"+port_ret)
+  print("RESULT"+str(port_ret).replace("\"","'"))
   f = open("portfolio.json", "w")
   f.write(json_f)
   f.close()

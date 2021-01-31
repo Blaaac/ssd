@@ -42,7 +42,7 @@ namespace Api {
 
       app.UseRouting ();
 
-      app.UseStaticFiles ();
+      // app.UseHttpsRedirection ();
 
       app.UseAuthorization ();
       app.UseDefaultFiles ();
