@@ -8,10 +8,7 @@ def index_pct(indexes):
 def gen_port(size):
   np.random.seed(1)
   w = np.random.uniform(low=0.05,high=1,size=size)
-  # w = np.random.random(len(indices))
-  # print(w)
   w /= np.sum(w)
-  # print(w)
   return w
 
 
@@ -30,13 +27,10 @@ def initial_capital(portfolio,capital):
   return portfolio*float(capital)
 
 def capital_variation(initial_capital,pctchg):
-  # print(initial_capital)
-  init = initial_capital#.iloc[0]
+  init = initial_capital
   pctchg = pctchg.reset_index(drop=True)
   res = ((1+ pctchg).cumprod() * init)
-
-  # print(pctchg)
-  # print(init)
+  #reinsert initial val in head
   res.loc[-1] = init  
   res.index = res.index + 1  
   res.sort_index(inplace=True) 
@@ -54,16 +48,10 @@ def moving_avg(portfolio, days=20):
 def portfolio_return(portfolio, days=20):
   return portfolio.tail(days).mean().sum()
 
-
 def portfolio_risk(portfolio,moving_avg,days=20):
-  port = portfolio[days+1:]
-  # for index in port:
-  #   a = moving_avg[index]
-  #   b = port[index]
-  return mean_squared_error(moving_avg,port,squared=False)#check order
+  return mean_squared_error(moving_avg,portfolio[days+1:],squared=False)
   
 def compute(fore,capital,port_split):
-  
   cap_split = initial_capital(port_split,capital)
   return capital_variation(cap_split,index_pct(fore))
 
@@ -72,17 +60,12 @@ def compute_risk(fore,capital):
   port_split = init_portfolio(indices)
   portfolio_val = compute(fore,capital,port_split)
 
-  # portfolio_pct =portfolio_var(portfolio_val)
-  # portfolio_tot = portfolio_value(portfolio_val)
   portfolio_ma = moving_avg(portfolio_val)
   return portfolio_risk(portfolio_val,portfolio_ma)
 
 def compute_return(fore,port_split,capital):
   portfolio_val = compute(fore,capital,port_split)
 
-  # portfolio_pct =portfolio_var(portfolio_val)
-  # portfolio_tot = portfolio_value(portfolio_val)
-  # portfolio_ma = moving_avg(portfolio_val)
   return portfolio_return(portfolio_val)
 
 def compute_risk_return_nocap(fore,weight,portfolio_split):
@@ -90,7 +73,9 @@ def compute_risk_return_nocap(fore,weight,portfolio_split):
   w2=1-weight
   portfolio_val = compute(fore,1,portfolio_split)
   portfolio_ma = moving_avg(portfolio_val)
-  return w1*1/portfolio_risk(portfolio_val,portfolio_ma)+ w2*portfolio_return(portfolio_val)
+  risk = portfolio_risk(portfolio_val,portfolio_ma)
+  ret = portfolio_return(portfolio_val)
+  return w1*1/risk+ w2*ret
 
 
 
