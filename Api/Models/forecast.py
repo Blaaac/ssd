@@ -96,8 +96,8 @@ if __name__ == "__main__":
   # print('MAPE Number of arguments:', len(sys.argv))
   # print('MAPE Argument List:', str(sys.argv), ' first true arg:',sys.argv[1])   
   # # print("MAPE indexes ", indexes)
-  indexes = ['SP_500']#,'GOLD_SPOT']
-  fore, acc, t = forecast(indexes, method, months, plot=False)#months to int
+  # indexes = ['SP_500','GOLD_SPOT']
+  fore, acc, t = forecast(indexes, method, months, plot=False)
   
 
   mypso = pso.PSO(indexes=fore,fitness_func=compute_risk_return_nocap,
@@ -105,8 +105,8 @@ if __name__ == "__main__":
                         weight= risk_w,
                         numvar=len(indexes))
   res = mypso.pso_solve(popsize=10,
-                        niter=30,
-                        nhood_size=5)
+                        niter=15,
+                        nhood_size=1)
 
   json_indexes =["S&P_500_INDEX","FTSE_MIB_INDEX","GOLD_SPOT_$_OZ","MSCI_EM","MSCI_EURO","All_Bonds_TR","U.S._Treasury"]
   port = array_to_portfolio(res,json_indexes)

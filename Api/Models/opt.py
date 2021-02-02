@@ -6,7 +6,6 @@ def index_pct(indexes):
   return indexes.pct_change()#.iloc[1:]
 
 def gen_port(size):
-  np.random.seed(1)
   w = np.random.uniform(low=0.05,high=1,size=size)
   w /= np.sum(w)
   return w
@@ -68,16 +67,18 @@ def compute_return(fore,port_split,capital):
 
   return portfolio_return(portfolio_val)
 
-def compute_risk_return_nocap(fore,weight,portfolio_split):
-  w1=weight
-  w2=1-weight
+def compute_risk_return_nocap(fore,weight,alpha,portfolio_split):
+  # print(portfolio_split)
+  w1=weight+alpha
+  w2=1-weight+alpha
   portfolio_val = compute(fore,1,portfolio_split)
   portfolio_ma = moving_avg(portfolio_val)
   risk = portfolio_risk(portfolio_val,portfolio_ma)
   ret = portfolio_return(portfolio_val)
-  return w1*1/risk+ w2*ret
+  # print(risk,ret)
+  # print(risk,ret)
+  a = (w1*risk*100)+( w2*ret)
+  # print( a)
+  
+  return a
 
-
-
-print(init_portfolio([1,2,4,4]))
-print(gen_port(3))
