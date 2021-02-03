@@ -49,12 +49,124 @@ function readResult(str) {
 
 function showResult(res) {
   console.log(res);
-  document.getElementById("txtarea").value = res.text;
-  document.getElementById("port").value = res.portfolio;
+  document.getElementById("txtarea").value = JSON.stringify(res.precision);
+  document.getElementById("port").value = JSON.stringify(res.portfolio);
+  showPortfolioGraph(res.portfolio);
+  showPrecisionGraph(res.precision);
   document.getElementById("actret").innerText = Number(res.result).toPrecision(
-    2
+    8
   );
   // renderImage(res.img);
+}
+
+window.onload = function () {};
+
+function showPrecisionGraph(data) {
+  let datap = {};
+
+  for (const [stock, prec] of Object.entries(data)) {
+    for (const [name, val] of Object.entries(prec)) {
+      datap[name] = {
+        type: "bar",
+        showInLegend: true,
+        name: name,
+        dataPoints: [],
+      };
+    }
+  }
+
+  for (const [stock, prec] of Object.entries(data)) {
+    for (const [name, val] of Object.entries(prec)) {
+      datap[name].dataPoints.push({ y: val, label: stock });
+    }
+  }
+  console.log(Object.values(datap));
+  console.log(data);
+
+  var chart = new CanvasJS.Chart("chartprecision", {
+    animationEnabled: true,
+    title: {
+      text: "Forecast accuracies",
+    },
+    axisY: {
+      title: "Value",
+      includeZero: true,
+    },
+    legend: {
+      cursor: "pointer",
+      itemclick: toggleDataSeries,
+    },
+    toolTip: {
+      shared: true,
+      content: toolTipFormatter,
+    },
+    data: Object.values(datap),
+  });
+  chart.render();
+
+  function toolTipFormatter(e) {
+    var str = "";
+    var total = 0;
+    var str3;
+    var str2;
+    for (var i = 0; i < e.entries.length; i++) {
+      var str1 =
+        '<span style= "color:' +
+        e.entries[i].dataSeries.color +
+        '">' +
+        e.entries[i].dataSeries.name +
+        "</span>: <strong>" +
+        e.entries[i].dataPoint.y +
+        "</strong> <br/>";
+      total = e.entries[i].dataPoint.y + total;
+      str = str.concat(str1);
+    }
+    str2 = "<strong>" + e.entries[0].dataPoint.label + "</strong> <br/>";
+    str3 =
+      '<span style = "color:Tomato">Total: </span><strong>' +
+      total +
+      "</strong><br/>";
+    return str2.concat(str).concat(str3);
+  }
+
+  function toggleDataSeries(e) {
+    if (typeof e.dataSeries.visible === "undefined" || e.dataSeries.visible) {
+      e.dataSeries.visible = false;
+    } else {
+      e.dataSeries.visible = true;
+    }
+    chart.render();
+  }
+}
+
+function showPortfolioGraph(data) {
+  delete data.horizon;
+
+  var elab = [];
+  for (const [key, value] of Object.entries(data)) {
+    console.log(key);
+    console.log(value);
+    elab.push({ y: value * 100, label: key });
+  }
+  console.log(elab);
+
+  var datap = [
+    {
+      type: "pie",
+      startAngle: 240,
+      yValueFormatString: '##0.00"%"',
+      indexLabel: "{label} {y}",
+      dataPoints: elab,
+    },
+  ];
+  var chart = new CanvasJS.Chart("chartportfolio", {
+    animationEnabled: true,
+    title: {
+      text: "Portfolio distribution",
+    },
+    data: datap,
+  });
+  chart.render();
 }
 function renderImage(b64imgstr) {
   var b64 = b64imgstr;

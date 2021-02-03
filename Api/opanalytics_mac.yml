@@ -145,6 +145,8 @@ dependencies:
   - zeromq
   - zipp
   - zlib
+  - statsmodels
+  - pmdarima
   - pip:
     - pykalman==0.9.5
 prefix: C:\Users\vittorio.maniezzo\.conda\envs\opanalytics

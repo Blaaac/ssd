@@ -64,21 +64,15 @@ def compute_risk(fore,capital):
 
 def compute_return(fore,port_split,capital):
   portfolio_val = compute(fore,capital,port_split)
-
   return portfolio_return(portfolio_val)
 
 def compute_risk_return_nocap(fore,weight,alpha,portfolio_split):
-  # print(portfolio_split)
   w1=weight+alpha
   w2=1-weight+alpha
   portfolio_val = compute(fore,1,portfolio_split)
   portfolio_ma = moving_avg(portfolio_val)
   risk = portfolio_risk(portfolio_val,portfolio_ma)
   ret = portfolio_return(portfolio_val)
-  # print(risk,ret)
-  # print(risk,ret)
-  a = (w1*risk*100)+( w2*ret)
-  # print( a)
-  
-  return a
+
+  return (w1*risk*100)+( w2*ret)
 

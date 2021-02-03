@@ -13,7 +13,13 @@ def plot_prediction(dataset,train_p,test_p):
 
 def load_df (path):
   # data upload
-  df = pd.read_csv("../"+path+".csv", header=0)
+  
+
+  try:
+    df = pd.read_csv("../"+path+".csv", header=0)
+  except :
+    df = pd.read_csv(path+".csv", header=0)
+
   # add date column
   # df['period']= datesf
   # df = df.set_index('period')
@@ -26,7 +32,7 @@ def forecast_accuracy(forecast, actual):
   mae = np.mean(np.abs(forecast - actual)) # MAE
   mpe = np.mean((forecast - actual)/actual) # MPE
   rmse = np.mean((forecast - actual)**2)**.5 # RMSE
-  corr = np.corrcoef(forecast, actual)[0,1] # corr
+  # corr = np.corrcoef(forecast, actual)[0,1] # corr
   mins = np.amin(np.hstack([forecast, actual]), axis=1)
   maxs = np.amax(np.hstack([forecast, actual]), axis=1)
   minmax = 1 - np.mean(mins/maxs) # minmax
@@ -34,7 +40,8 @@ def forecast_accuracy(forecast, actual):
   return({'mape':mape, 'me':me, 'mae': mae,
           'mpe': mpe, 'rmse':rmse, 
           'acf1':acf1,
-          'corr':corr, 'minmax':minmax})
+          # 'corr':corr,
+           'minmax':minmax})
 # import os
 # abspath = os.path.abspath(__file__)
 # dname = os.path.dirname(abspath)

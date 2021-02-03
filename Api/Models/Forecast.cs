@@ -8,7 +8,7 @@ namespace Api {
 
     }
     public string forecastIndexes (string method, string[] indexes, int investment, int months, double risk_w) {
-      string res = "\"text\":\"";
+      string res = "\"precision\":";
       string json = "";
       string metrics = "";
       string result = "";
@@ -57,7 +57,7 @@ namespace Api {
         }
 
         res += metrics;
-        json = "\"portfolio\":\"" + json;
+        json = "\"portfolio\":" + json;
         // json += "\"";
 
         result = "\"result\":\"" + result + "\"";
@@ -65,9 +65,9 @@ namespace Api {
         //res += json;
         // Console.Write (strBitMap);
         // strBitMap = strBitMap.Substring (strBitMap.IndexOf ("b'"));
-        res += "\"";
+        // res += "\"";
         res += "," + json;
-        res += "\"";
+        // res += "\"";
         res += "," + result;
 
         // res += ",\"img\":\"" + strBitMap + "\"";

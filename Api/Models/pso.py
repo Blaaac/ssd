@@ -74,27 +74,8 @@ class PSO:
           # update position	
           pop[i].x[d] += pop[i].v[d]	
 
+        #check if within constrainsts
         pop[i].x,pop[i].v = self.fix_pos(pop[i].x,pop[i].v)
-
-        # for d in range (self.numvar):
-        #   # clamp position within bounds	
-        #   pop[i].x /= np.sum(pop[i].x)  
-        #   if (pop[i].x[d] <= self.xmin):	
-        #     pop[i].x[d] = self.xmin
-        #     pop[i].v[d] = -pop[i].v[d]
-        #   elif (pop[i].x[d] >= self.xmax):
-        #     pop[i].x[d] = self.xmax
-        #     pop[i].v[d] = -pop[i].v[d]
-        # print(pop[i].x)
-
-
-
-        # pop[i].x /= np.sum(pop[i].x)
-        # if (int(np.sum(pop[i].x))>1):
-        #   print("b::")
-        #   print(pop[i].x)
-
-        #ensure sum is 1
 
         # update particle fitness
         pop[i].fit = self.fitness_func(self.indexes,self.weight,self.alpha,pop[i].x)
@@ -106,7 +87,7 @@ class PSO:
             pop[i].xbest[j] = pop[i].x[j]
 
         # update neighborhood best
-        pop[i].fitnbest = -np.inf#meno?
+        pop[i].fitnbest = -np.inf
         for j in range(nhood_size):
           if(pop[pop[i].nset[j]].fit > pop[i].fitnbest):
             pop[i].fitnbest = pop[pop[i].nset[j]].fit
@@ -114,7 +95,7 @@ class PSO:
             for k in range (self.numvar):
               pop[i].nxbest[k] = pop[ pop[i].nset[j]].x[k]
         #	update gbest
-        if (pop[i].fit > self.fitbest):#>?
+        if (pop[i].fit > self.fitbest):
           print(pop[i].fit)
           #	update best fitness 
           self.fitbest = pop[i].fit
@@ -123,11 +104,10 @@ class PSO:
             self.xsolbest[j] = pop[i].x[j]
         #..........-......................... return result
     #return self.fitbest
-    return self.xsolbest  
+    return self.xsolbest
 
   def is_pos_ok(self,x):
     for i in range(len(x)):
-      # clamp position within bounds	
       if (x[i] < self.xmin or x[i] > self.xmax):	
         return False
     if (int(np.sum(x))>1 or int(np.sum(x))<1 ):
@@ -148,21 +128,13 @@ class PSO:
       else:
         pos_out=np.append(pos_out,x[i])
         vel_out=np.append(vel_out,v[i])
-      # print(pop[
+    #sum to 1
     pos_out /= np.sum(pos_out)  
     if(self.is_pos_ok(pos_out)):
       return pos_out, vel_out
     else:
-      p =self.init_func(self.numvar)
+      p = self.init_func(self.numvar)
       return p,v
-
-  def ensure_sum_1(self, pos):
-    res = np.array([])
-    for p in pos: # ensures sum to 1.0
-        res = np.append(res, p/sum(pos))
-    return res
-
-
 
 
 def paraboloid(xvec):
