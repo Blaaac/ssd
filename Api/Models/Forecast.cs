@@ -33,6 +33,7 @@ namespace Api {
         string[] lines = list.Split (new [] { Environment.NewLine }, StringSplitOptions.None);
         string strBitMap = "";
         foreach (string s in lines) {
+          // Console.Write (s);
           if (s.StartsWith (metricsPrefix)) {
             Console.Write (s.Substring (metricsPrefix.Length));
             metrics += s.Substring (metricsPrefix.Length);
