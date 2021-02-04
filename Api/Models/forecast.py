@@ -38,6 +38,33 @@ def forecast (indexes,method, months=24,plot=False):
 
   return forecasts, accuracies, test_vals
 
+def compute_optimal_portfolio(indexes,method,investment,months,risk_w):
+
+  indexes = ['SP_500','GOLD_SPOT']
+  json_indexes =["S&P_500_INDEX","FTSE_MIB_INDEX","GOLD_SPOT_$_OZ","MSCI_EM","MSCI_EURO","All_Bonds_TR","U.S._Treasury"]
+
+  fore, acc, t = forecast(indexes, method, months, plot=False)
+  
+  mypso = pso.PSO(indexes=fore,fitness_func=compute_risk_return_nocap,
+                        init_func=gen_port,
+                        weight= risk_w,
+                        numvar=len(indexes))
+  res = mypso.pso_solve(popsize=10,
+                        niter=15,
+                        nhood_size=3)
+
+  
+  port = array_to_portfolio(res,json_indexes)
+  #for output
+  port_ret = compute_return(fore,res,investment)
+  port.insert(0, "horizon", months)
+
+  json_f=port.iloc[0].to_json(orient='index')
+  
+  return json_f,json.dumps(acc),port_ret
+
+ 
+
 
 
 if __name__ == "__main__":
@@ -52,35 +79,16 @@ if __name__ == "__main__":
   months = int(sys.argv[10])
   risk_w = float(sys.argv[11])
 
-  # indexes = ['SP_500','GOLD_SPOT']
-
-  fore, acc, t = forecast(indexes, method, months, plot=False)
-  
-
-  mypso = pso.PSO(indexes=fore,fitness_func=compute_risk_return_nocap,
-                        init_func=gen_port,
-                        weight= risk_w,
-                        numvar=len(indexes))
-  res = mypso.pso_solve(popsize=10,
-                        niter=15,
-                        nhood_size=3)
-
-  json_indexes =["S&P_500_INDEX","FTSE_MIB_INDEX","GOLD_SPOT_$_OZ","MSCI_EM","MSCI_EURO","All_Bonds_TR","U.S._Treasury"]
-  
-  port = array_to_portfolio(res,json_indexes)
-  #for output
-  port_ret = compute_return(fore,res,investment)
-  port.insert(0, "horizon", months)
-
-  json_f=port.iloc[0].to_json(orient='index')
+  json_f,acc,port_ret = compute_optimal_portfolio(indexes,method,investment,months,risk_w)
 
   print("PORTFOLIO"+json_f)
-  print("METRICS"+json.dumps(acc))
+  print("METRICS"+acc)
   print("RESULT"+str(port_ret))
 
   f = open("portfolio.json", "w")
   f.write(json_f)
   f.close()
+
 
 
 
