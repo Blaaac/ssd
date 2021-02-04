@@ -61,7 +61,7 @@ def compute_optimal_portfolio(indexes,method,investment,months,risk_w):
 
   json_f=port.iloc[0].to_json(orient='index')
   
-  return json_f,json.dumps(acc),port_ret
+  return {'portfolio':json_f,'metrics':json.dumps(acc),'result':port_ret}
 
  
 
@@ -79,14 +79,15 @@ if __name__ == "__main__":
   months = int(sys.argv[10])
   risk_w = float(sys.argv[11])
 
-  json_f,acc,port_ret = compute_optimal_portfolio(indexes,method,investment,months,risk_w)
+  res = compute_optimal_portfolio(indexes,method,investment,months,risk_w)
 
-  print("PORTFOLIO"+json_f)
-  print("METRICS"+acc)
-  print("RESULT"+str(port_ret))
+
+  print("portfolio"+res['portfolio'])
+  print("metrics"+res['metrics'])
+  print("result"+str(res['result']))
 
   f = open("portfolio.json", "w")
-  f.write(json_f)
+  f.write(res['portfolio'])
   f.close()
 
 

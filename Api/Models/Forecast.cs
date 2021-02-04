@@ -15,9 +15,9 @@ namespace Api {
       string interpreter = "/home/ruben/anaconda3/bin/python";
       string environment = "opanalytics";
       int timeout = 10000;
-      string portPrefix = "PORTFOLIO";
-      string metricsPrefix = "METRICS";
-      string resPrefix = "RESULT";
+      string portPrefix = "portfolio";
+      string metricsPrefix = "metrics";
+      string resPrefix = "result";
       PythonRunner PR = new PythonRunner (interpreter, environment, timeout);
       // Bitmap bmp = null;
       string attribute = indexes[0];
