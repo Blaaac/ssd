@@ -1,6 +1,7 @@
 name: opanalytics
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - alabaster
   - argh

@@ -35,7 +35,7 @@ RUN bash Anaconda3-5.0.1-Linux-x86_64.sh -b
 RUN rm Anaconda3-5.0.1-Linux-x86_64.sh
 
 # Set path to conda
-# ENV PATH /root/anaconda3/bin:$PATH
+ENV PATH /root/anaconda3/bin:$PATH
 ENV PATH /home/ruben/anaconda3/bin:$PATH
 
 # Updating Anaconda packages
@@ -45,9 +45,14 @@ RUN conda update conda
 WORKDIR /app
 USER root
 RUN conda env create -f opanalytics_mac.yml
+# SHELL ["conda", "run", "-n", "opanalytics", "/bin/bash", "-c"]
 RUN chmod a+rwx /app
+# RUN conda config --append channels conda-forge
+
+# RUN conda install pmdarima
 USER ruben
 RUN conda init bash
-
+# RUN conda activate opanalytics
+# RUN pip install -g pmdarima statsmodels  
 ENTRYPOINT ["dotnet", "Api.dll"]
 EXPOSE 5000
