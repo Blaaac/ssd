@@ -1,10 +1,15 @@
-function submit(params) {
+function submit() {
   console.log("submitting");
   const formData = new FormData(document.querySelector("form"));
   console.log(formData.entries());
 }
-
-function subm(params) {
+// var host = window.location.host === 'localhost' ? 'http://localhost/api/fin/' : 'http://example.com/myapi/';
+// var full = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+// console.log(full)
+// const api = window.location.host === 'localhost' ? 'http://localhost/api/fin/' : 'http://example.com/myapi/';
+var protocol = window.location.protocol;
+var host = window.location.host;
+function subm() {
   var months = +document.querySelector("#months").innerHTML;
   console.log(months);
 
@@ -13,10 +18,15 @@ function subm(params) {
 
   var risk = +document.querySelector("#risk").innerHTML;
   console.log(risk);
+  console.log(protocol);
 
   $.ajax({
     url:
-      "http://localhost:3000/api/fin/?" +
+      // "http://localhost:3000/api/fin/?" +
+      "" +
+      protocol +
+      // hosto +
+      "/api/fin/?" +
       new URLSearchParams({
         investment: cash,
         months: months,
@@ -53,7 +63,7 @@ function showResult(res) {
   document.getElementById("port").value = JSON.stringify(res.portfolio);
   showPortfolioGraph(res.portfolio);
   showPrecisionGraph(res.metrics);
-  document.getElementById("actret").innerText = Number(res.result).toPrecision(
+  document.getElementById("actret").innerText = Number(res.return).toPrecision(
     8
   );
   // renderImage(res.img);

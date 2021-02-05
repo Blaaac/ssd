@@ -17,7 +17,8 @@ namespace Api {
       client.DefaultRequestHeaders.Accept.Clear ();
       client.DefaultRequestHeaders.Accept.Add (
         new MediaTypeWithQualityHeaderValue ("application/json"));
-      UriBuilder builder = new UriBuilder ("http://localhost:5000/api/portfolio");
+      string pythonhost = "python-service"; //"localhost"
+      UriBuilder builder = new UriBuilder ($"http://{pythonhost}:5000/api/portfolio");
       string ind = "";
       foreach (string index in indexes) {
         ind += $"index={index}&";
