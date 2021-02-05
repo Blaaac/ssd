@@ -16,7 +16,7 @@ function subm(params) {
 
   $.ajax({
     url:
-      "http://localhost:5000/api/fin/?" +
+      "http://localhost:3000/api/fin/?" +
       new URLSearchParams({
         investment: cash,
         months: months,
@@ -52,7 +52,7 @@ function showResult(res) {
   document.getElementById("txtarea").value = JSON.stringify(res.precision);
   document.getElementById("port").value = JSON.stringify(res.portfolio);
   showPortfolioGraph(res.portfolio);
-  showPrecisionGraph(res.precision);
+  showPrecisionGraph(res.metrics);
   document.getElementById("actret").innerText = Number(res.result).toPrecision(
     8
   );

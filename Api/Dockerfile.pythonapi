@@ -1,0 +1,22 @@
+FROM continuumio/miniconda:latest
+
+WORKDIR /home/api
+
+COPY opanalytics_mac.yml ./
+RUN conda env create -f opanalytics_mac.yml
+COPY /Models/*.py ./
+COPY /Models/boot.sh ./
+COPY *.csv ./../
+
+RUN chmod +x boot.sh
+
+
+RUN echo "source activate opanalytics" > ~/.bashrc
+ENV PATH /opt/conda/envs/opanalytics/bin:$PATH
+
+
+
+EXPOSE 5000
+
+
+ENTRYPOINT ["./boot.sh"]

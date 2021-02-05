@@ -1,11 +1,34 @@
 using System;
-using System.Drawing;
-// using System.Drawing.;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Api {
   public class Forecast {
     public Forecast () {
 
+    }
+    static HttpClient client = new HttpClient ();
+
+    public string forecastRemote (string method, string[] indexes, int investment, int months, double risk_w) {
+      // client.BaseAddress = new Uri ("http://localhost:5000");
+      client.DefaultRequestHeaders.Accept.Clear ();
+      client.DefaultRequestHeaders.Accept.Add (
+        new MediaTypeWithQualityHeaderValue ("application/json"));
+      UriBuilder builder = new UriBuilder ("http://localhost:5000/api/portfolio");
+      string ind = "";
+      foreach (string index in indexes) {
+        ind += $"index={index}&";
+      }
+      builder.Query = $"{ind}method={method}&investment={investment}&risk_w={risk_w}&months={months}";
+
+      var result = client.GetAsync (builder.Uri).Result;
+
+      using (StreamReader sr = new StreamReader (result.Content.ReadAsStreamAsync ().Result)) {
+        return sr.ReadToEnd ();
+      }
     }
     public string forecastIndexes (string method, string[] indexes, int investment, int months, double risk_w) {
       string res = "\"precision\":";

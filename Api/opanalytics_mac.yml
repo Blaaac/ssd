@@ -148,6 +148,8 @@ dependencies:
   - zlib
   - statsmodels
   - pmdarima
+  - flask
+  - gunicorn
   - pip:
     - pykalman==0.9.5
 prefix: C:\Users\vittorio.maniezzo\.conda\envs\opanalytics

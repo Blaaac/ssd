@@ -4,7 +4,7 @@ from forecast import compute_optimal_portfolio
 from flask import request
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+# app.config["DEBUG"] = True
 
 
 # route to perfom the optimization
@@ -20,5 +20,5 @@ def api_all():
 
   return json
 
-
-app.run()
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

@@ -40,11 +40,13 @@ namespace Api {
             foreach (string attribute in indices) {
                 var index = P.readIndex (attribute);
             }
-            string res = "{";
             Forecast F = new Forecast ();
-            res += F.forecastIndexes ("sarima", indices, investment, months, risk_w);
-            // string json = F.forecastIndexes ("sarima", indices, investment, months, risk_w);
-            res += "}";
+            // string res = "{";
+
+            // res += F.forecastIndexes ("sarima", indices, investment, months, risk_w);
+            // res += "}";
+            string res = F.forecastRemote ("sarima", indices, investment, months, risk_w);
+            Console.WriteLine (res);
             return res;
         }
 
