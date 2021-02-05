@@ -16,7 +16,7 @@ def load_df (path):
   
 
   try:
-    df = pd.read_csv("../"+path+".csv", header=0)
+    df = pd.read_csv("data/"+path+".csv", header=0)
   except :
     df = pd.read_csv(path+".csv", header=0)
 

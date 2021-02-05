@@ -9,18 +9,11 @@ services:
       - ssd-network
     ports:
       - 5000:5000
-      # - 80:80
-      # - 443:443
-    # env_file: .env
-    # environment:
-    #   - NODE_ENV=$NODE_ENV
-    #   - VUE_APP_API_ENDPOINT=$VUE_APP_API_ENDPOINT
-    #   - TELEGRAM_ACCESS_TOKEN=$TELEGRAM_ACCESS_TOKEN
     restart: on-failure
     depends_on:
       - webapi-service
-    # volumes:
-    #   - ./data:/app
+    volumes:
+      - data:/app/data
   webapi-service:
     image: webapi
     build:
@@ -30,15 +23,10 @@ services:
       - ssd-network
     ports:
       - 80:80
-    # env_file: .env
-    # environment:
-      # - ASPNETCORE_URLS=http://localhost:3000/
-    #   - PORT=5000
-    #   - NODE_ENV=$NODE_ENV
-    # volumes:
-    #   - ./data:/app
+    volumes:
+      - data:/app/data
     restart: always
 volumes:
-  dbdata:
+  data:
 networks:
   ssd-network:
