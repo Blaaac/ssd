@@ -8,17 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api {
-    public class Portfolio {
-        public string horizon { get; set; }
-        // public float S&P_500_INDEX {get;set;}
-        // public float FTSE_MIB_INDEX {get;set;}
-        // public float GOLD_SPOT_$_OZ {get;set;}
-        // public float MSCI_EM {get;set;}
-        // public float MSCI_EURO {get;set;}
-        // public float All_Bonds_TR {get;set;}
-        // public float U.S._Treasury {get;set;}
-
-    }
 
     [Route ("api/[controller]")]
     [ApiController]
@@ -42,7 +31,6 @@ namespace Api {
             }
             Forecast F = new Forecast ();
             // string res = "{";
-
             // res += F.forecastIndexes ("sarima", indices, investment, months, risk_w);
             // res += "}";
             string res = F.forecastRemote ("sarima", indices, investment, months, risk_w);

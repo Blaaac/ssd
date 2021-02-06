@@ -2,7 +2,6 @@ import pandas as pd, numpy as np, os, sys
 
 
 import matplotlib.pyplot as plt
-# from lstm import lstm_predict
 from util import  load_df, forecast_accuracy
 from arima import arima
 import json
@@ -26,8 +25,9 @@ def forecast (indexes,method, months=24,plot=False):
   # elif (method == "lstm"): 
   # # LSTM
   #   predictor = lstm_predict
+  path = str(os.environ.get("DATA_PATH","./data/"))
   for indice in indexes:
-    df = load_df(indice)
+    df = load_df(path,indice)
    
     res, test = predictor(df,split,plot=plot)
     accuracies[indice] = forecast_accuracy(res.values,test.values)

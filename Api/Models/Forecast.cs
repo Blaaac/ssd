@@ -13,12 +13,13 @@ namespace Api {
     static HttpClient client = new HttpClient ();
 
     public string forecastRemote (string method, string[] indexes, int investment, int months, double risk_w) {
-      // client.BaseAddress = new Uri ("http://localhost:5000");
+      client.Timeout = TimeSpan.FromMinutes (5); //neeedd for long computation
       client.DefaultRequestHeaders.Accept.Clear ();
       client.DefaultRequestHeaders.Accept.Add (
         new MediaTypeWithQualityHeaderValue ("application/json"));
       string pythonhost = "python-service"; //"localhost"
-      UriBuilder builder = new UriBuilder ($"http://{pythonhost}:5000/api/portfolio");
+      string port = Environment.GetEnvironmentVariable ("PYTHONAPI_PORT");
+      UriBuilder builder = new UriBuilder ($"http://{pythonhost}:{port}/api/portfolio");
       string ind = "";
       foreach (string index in indexes) {
         ind += $"index={index}&";
@@ -87,15 +88,9 @@ namespace Api {
 
         result = "\"result\":\"" + result + "\"";
 
-        //res += json;
-        // Console.Write (strBitMap);
-        // strBitMap = strBitMap.Substring (strBitMap.IndexOf ("b'"));
-        // res += "\"";
         res += "," + json;
-        // res += "\"";
-        res += "," + result;
 
-        // res += ",\"img\":\"" + strBitMap + "\"";
+        res += "," + result;
 
         goto lend;
 
@@ -107,7 +102,7 @@ namespace Api {
       lend:
         Console.WriteLine (res);
 
-      return res; //json.Substring (portPrefix.Length);
+      return res;
 
     }
 

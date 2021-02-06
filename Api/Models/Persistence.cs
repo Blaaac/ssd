@@ -11,7 +11,9 @@ namespace Api.Models {
     }
     public List<string> readIndex (string attribute) {
       List<string> serie = new List<string> ();
-      StreamWriter fout = new StreamWriter ("./data/" + attribute + ".csv", false);
+      string path = Environment.GetEnvironmentVariable ("DATA_PATH");
+
+      StreamWriter fout = new StreamWriter (path + attribute + ".csv", false);
 
       serie.Add (attribute);
       fout.WriteLine (attribute);

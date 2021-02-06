@@ -1,6 +1,7 @@
 import flask
 from forecast import compute_optimal_portfolio
-
+import json
+import os
 from flask import request
 
 app = flask.Flask(__name__)
@@ -16,9 +17,12 @@ def api_all():
   investment = request.args.get("investment",default = 1000, type = int)
   risk_w = request.args.get("risk_w",default = 0.5, type = int)
 
-  json = compute_optimal_portfolio(indexes,method,investment,months,risk_w)
-
-  return json
+  json_out = compute_optimal_portfolio(indexes,method,investment,months,risk_w)
+  path = str(os.environ.get("DATA_PATH","./data/"))
+  with open(path+'portfolio.json', 'w', encoding='utf-8') as f:
+    json.dump(json_out['portfolio'], f, ensure_ascii=False, indent=4)
+  return json_out
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+  port = int(os.environ.get("PYTHONAPI_PORT", 5000))
+  app.run(host='0.0.0.0', port=port)

@@ -1,31 +1,16 @@
-function submit() {
-  console.log("submitting");
-  const formData = new FormData(document.querySelector("form"));
-  console.log(formData.entries());
-}
-// var host = window.location.host === 'localhost' ? 'http://localhost/api/fin/' : 'http://example.com/myapi/';
-// var full = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
-// console.log(full)
-// const api = window.location.host === 'localhost' ? 'http://localhost/api/fin/' : 'http://example.com/myapi/';
 var protocol = window.location.protocol;
 var host = window.location.host;
 function subm() {
   var months = +document.querySelector("#months").innerHTML;
-  console.log(months);
 
   var cash = +document.querySelector("#cash").innerHTML;
-  console.log(cash);
 
   var risk = +document.querySelector("#risk").innerHTML;
-  console.log(risk);
-  console.log(protocol);
 
   $.ajax({
     url:
-      // "http://localhost:3000/api/fin/?" +
       "" +
       protocol +
-      // hosto +
       "/api/fin/?" +
       new URLSearchParams({
         investment: cash,
@@ -45,6 +30,7 @@ function subm() {
     },
     error: function (xhr, status, p3, p4) {
       var err = "Error " + " " + status + " " + p3;
+      console.log(err);
       if (xhr.responseText && xhr.responseText[0] == "{")
         err = JSON.parse(xhr.responseText).message;
       alert(err);
@@ -59,7 +45,7 @@ function readResult(str) {
 
 function showResult(res) {
   console.log(res);
-  document.getElementById("txtarea").value = JSON.stringify(res.precision);
+  document.getElementById("txtarea").value = JSON.stringify(res.metrics);
   document.getElementById("port").value = JSON.stringify(res.portfolio);
   showPortfolioGraph(res.portfolio);
   showPrecisionGraph(res.metrics);
