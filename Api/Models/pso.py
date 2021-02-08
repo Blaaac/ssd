@@ -57,9 +57,7 @@ class PSO:
           id = rnd.randrange(popsize)
         else:
           pop[i].nset[j] = id
-      print("i::")
-      print(pop[i].x)
-    #..........-..................-........run the code
+    #run the code
     for iter in range(niter) :
       print("............. iter {0} zub {1}".format(iter,self.fitbest))
       #	update all particles
@@ -102,7 +100,7 @@ class PSO:
           #	copy particle pos to gbest vector
           for j in range(self.numvar):
             self.xsolbest[j] = pop[i].x[j]
-        #..........-......................... return result
+        #return result
     #return self.fitbest
     return self.xsolbest
 

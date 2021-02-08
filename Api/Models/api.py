@@ -19,8 +19,12 @@ def api_all():
 
   json_out = compute_optimal_portfolio(indexes,method,investment,months,risk_w)
   path = str(os.environ.get("DATA_PATH","./data/"))
-  with open(path+'portfolio.json', 'w', encoding='utf-8') as f:
-    json.dump(json_out['portfolio'], f, ensure_ascii=False, indent=4)
+  try:
+    with open(path+'portfolio.json', 'w', encoding='utf-8') as f:
+      json.dump(json_out['portfolio'], f, ensure_ascii=False, indent=4)
+  except:
+    with open('portfolio.json', 'w', encoding='utf-8') as f:
+      json.dump(json_out['portfolio'], f, ensure_ascii=False, indent=4)
   return json_out
 
 if __name__ == '__main__':
