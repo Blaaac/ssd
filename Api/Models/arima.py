@@ -12,7 +12,7 @@ def arima(df,split,plot=False):
   train = df[:-split]
   test = df[-split:]
   model = pm.auto_arima(train.values, start_p=1, start_q=1,
-                            #test='adf', 
+                            test='adf', 
                             max_p=3, max_q=3, seasonal=False,
                             trace=True,
                            # random=True,
@@ -40,5 +40,5 @@ def arima(df,split,plot=False):
   exptest = np.exp(test)
   if (plot):
     plot_prediction(np.exp(df),expdata,expfore)
-  score =0
+
   return expfore, exptest
