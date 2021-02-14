@@ -40,7 +40,7 @@ def forecast (indexes,method, months=24,plot=False):
 
 def compute_optimal_portfolio(indexes,method,investment,months,risk_w):
 
-  indexes = ['SP_500','GOLD_SPOT']
+  # indexes = ['SP_500','GOLD_SPOT']
   json_indexes =["S&P_500_INDEX","FTSE_MIB_INDEX","GOLD_SPOT_$_OZ","MSCI_EM","MSCI_EURO","All_Bonds_TR","U.S._Treasury"]
 
   fore, acc, t = forecast(indexes, method, months, plot=False)

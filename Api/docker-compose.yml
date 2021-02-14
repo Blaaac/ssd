@@ -8,8 +8,8 @@ services:
     networks:
       - ssd-network
     env_file: .env
-    # ports:
-    #   - $PYTHONAPI_PORT:5000
+    ports:
+      - $PYTHONAPI_PORT:5000
     restart: on-failure
     depends_on:
       - webapi-service
