@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Api.Models;
 using Microsoft.AspNetCore.Builder;
@@ -11,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-// using Api.Controllers;
 
 namespace Api {
   public class Startup {
@@ -23,6 +23,13 @@ namespace Api {
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices (IServiceCollection services) {
+      services.AddHttpClient<Forecast> (client => {
+        client.Timeout = TimeSpan.FromMinutes (10); //needed for long computation
+        client.DefaultRequestHeaders.Accept.Clear ();
+        client.DefaultRequestHeaders.Accept.Add (
+          new MediaTypeWithQualityHeaderValue ("application/json"));
+
+      });
       services.AddDbContext<FinContext> (options =>
         options.UseSqlite ("Data Source=finindices.sqlite"));
       services.AddControllers ();

@@ -8,6 +8,7 @@ function subm() {
   var risk = +document.querySelector("#risk").innerHTML;
 
   $.ajax({
+    timeout: 300000,
     url:
       "" +
       protocol +

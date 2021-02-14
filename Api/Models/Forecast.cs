@@ -7,16 +7,13 @@ using System.Threading.Tasks;
 
 namespace Api {
   public class Forecast {
-    public Forecast () {
 
+    private readonly HttpClient _httpClient;
+    public Forecast (HttpClient client) {
+      _httpClient = client;
     }
-    static HttpClient client = new HttpClient ();
 
     public string forecastRemote (string method, string[] indexes, int investment, int months, double risk_w) {
-      client.Timeout = TimeSpan.FromMinutes (5); //neeedd for long computation
-      client.DefaultRequestHeaders.Accept.Clear ();
-      client.DefaultRequestHeaders.Accept.Add (
-        new MediaTypeWithQualityHeaderValue ("application/json"));
       string pythonhost = "python-service"; //"localhost"
       string port = Environment.GetEnvironmentVariable ("PYTHONAPI_PORT");
       UriBuilder builder = new UriBuilder ($"http://{pythonhost}:{port}/api/portfolio");
@@ -26,7 +23,7 @@ namespace Api {
       }
       builder.Query = $"{ind}method={method}&investment={investment}&risk_w={risk_w}&months={months}";
 
-      var result = client.GetAsync (builder.Uri).Result;
+      var result = _httpClient.GetAsync (builder.Uri).Result;
 
       using (StreamReader sr = new StreamReader (result.Content.ReadAsStreamAsync ().Result)) {
         return sr.ReadToEnd ();

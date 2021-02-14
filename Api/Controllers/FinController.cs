@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Api.Models;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,7 @@ namespace Api {
 
         private Persistence P;
         private string[] indices;
+
         public FinController (FinContext context) {
             _context = context;
             P = new Persistence (context);
@@ -29,7 +31,8 @@ namespace Api {
             foreach (string attribute in indices) {
                 var index = P.readIndex (attribute);
             }
-            Forecast F = new Forecast ();
+            Forecast F = new Forecast (new HttpClient ());
+
             // string res = "{";
             // res += F.forecastIndexes ("sarima", indices, investment, months, risk_w);
             // res += "}";
@@ -47,7 +50,7 @@ namespace Api {
             string attribute = indices[id];
             var index = P.readIndex (attribute);
 
-            Forecast F = new Forecast ();
+            Forecast F = new Forecast (new HttpClient ());
             res += F.forecastSARIMAindex (attribute);
             res += "}";
 
